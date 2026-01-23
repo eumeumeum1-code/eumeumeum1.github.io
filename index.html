@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>법인회생/법인파산 자가진단 | 법무법인 JLP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root{--brown:#5C4A3D;--brown-light:#7A6455;--gold:#B8956E;--cream:#FAF7F2;--warm:#F5EDE3;--card:#FFFDF9;--dark:#3D3028;--medium:#5C4A3D;--light:#8B7A6B;--border:#E8DFD3;--success:#6B8E6B;--warning:#C4925A;--danger:#A65D5D}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(135deg,var(--cream),var(--warm));min-height:100vh;color:var(--dark);line-height:1.7}
+        .header{background:var(--card);padding:20px 0;box-shadow:0 2px 10px rgba(92,74,61,.08);position:sticky;top:0;z-index:100}
+        .header-content{max-width:1000px;margin:0 auto;padding:0 20px;display:flex;justify-content:space-between;align-items:center}
+        .logo{height:55px}
+        .contact-info{text-align:right}
+        .contact-label{font-size:12px;color:var(--light)}
+        .contact-number{font-size:22px;font-weight:700;color:var(--brown)}
+        .hero{background:linear-gradient(135deg,var(--brown),var(--brown-light));padding:50px 20px;text-align:center;color:#fff}
+        .hero h1{font-size:28px;font-weight:700;margin-bottom:12px}
+        .hero p{font-size:15px;opacity:.9;max-width:550px;margin:0 auto}
+        .progress-container{max-width:750px;margin:-25px auto 30px;padding:0 20px;position:relative;z-index:10}
+        .progress-bar{background:var(--card);border-radius:14px;padding:20px 25px;box-shadow:0 6px 24px rgba(92,74,61,.1)}
+        .progress-steps{display:flex;justify-content:space-between;position:relative}
+        .progress-steps::before{content:'';position:absolute;top:18px;left:8%;right:8%;height:3px;background:var(--border)}
+        .progress-line{position:absolute;top:18px;left:8%;height:3px;background:var(--gold);transition:width .4s;width:0}
+        .step{display:flex;flex-direction:column;align-items:center;position:relative;z-index:1}
+        .step-number{width:36px;height:36px;border-radius:50%;background:var(--warm);border:3px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px;color:var(--light);transition:all .3s}
+        .step.active .step-number{background:var(--gold);border-color:var(--gold);color:#fff;transform:scale(1.1)}
+        .step.completed .step-number{background:var(--success);border-color:var(--success);color:#fff}
+        .step-label{margin-top:8px;font-size:11px;color:var(--light);text-align:center}
+        .step.active .step-label{color:var(--brown);font-weight:500}
+        .main-content{max-width:850px;margin:0 auto 50px;padding:0 20px}
+        .section-card{background:var(--card);border-radius:18px;padding:35px;margin-bottom:20px;box-shadow:0 4px 16px rgba(92,74,61,.08);display:none;animation:fadeIn .3s}
+        .section-card.active{display:block}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+        .section-title{font-size:20px;font-weight:700;color:var(--brown);margin-bottom:6px;display:flex;align-items:center;gap:10px}
+        .section-title .icon{width:32px;height:32px;background:linear-gradient(135deg,var(--gold),var(--brown-light));border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:700}
+        .section-subtitle{color:var(--light);font-size:13px;margin-bottom:28px;padding-left:42px}
+        .form-group{margin-bottom:24px}
+        .form-label{font-size:14px;font-weight:600;color:var(--medium);margin-bottom:12px;display:block}
+        .form-label .required{color:var(--danger);margin-left:3px}
+        .checkbox-grid,.radio-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+        .checkbox-item,.radio-item{position:relative}
+        .checkbox-item input,.radio-item input{position:absolute;opacity:0;cursor:pointer}
+        .checkbox-label,.radio-label{display:flex;align-items:center;padding:12px 14px;background:var(--warm);border:2px solid transparent;border-radius:10px;cursor:pointer;transition:all .2s;font-size:13px;color:var(--medium)}
+        .checkbox-label:hover,.radio-label:hover{background:var(--cream);border-color:var(--border)}
+        .checkbox-item input:checked+.checkbox-label,.radio-item input:checked+.radio-label{background:rgba(184,149,110,.12);border-color:var(--gold);color:var(--brown);font-weight:500}
+        .check-icon,.radio-icon{width:20px;height:20px;border:2px solid var(--border);margin-right:10px;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+        .check-icon{border-radius:5px}
+        .radio-icon{border-radius:50%}
+        .checkbox-item input:checked+.checkbox-label .check-icon{background:var(--gold);border-color:var(--gold)}
+        .radio-item input:checked+.radio-label .radio-icon{border-color:var(--gold)}
+        .check-icon::after{content:'✓';color:#fff;font-size:12px;font-weight:700;opacity:0}
+        .checkbox-item input:checked+.checkbox-label .check-icon::after{opacity:1}
+        .radio-icon::after{content:'';width:8px;height:8px;background:var(--gold);border-radius:50%;opacity:0}
+        .radio-item input:checked+.radio-label .radio-icon::after{opacity:1}
+        .info-box,.warning-box{border-radius:10px;padding:14px 16px;margin-top:16px;display:flex;align-items:flex-start;gap:10px}
+        .info-box{background:rgba(184,149,110,.1);border:1px solid rgba(184,149,110,.25)}
+        .warning-box{background:rgba(166,93,93,.08);border:1px solid rgba(166,93,93,.25)}
+        .info-box .icon{color:var(--gold);font-size:18px}
+        .warning-box .icon{color:var(--danger);font-size:18px}
+        .info-box p,.warning-box p{font-size:12px;line-height:1.6}
+        .info-box p{color:var(--medium)}
+        .warning-box p{color:var(--danger)}
+        .nav-buttons{display:flex;justify-content:space-between;margin-top:35px;padding-top:25px;border-top:1px solid var(--border)}
+        .btn{padding:14px 32px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:all .25s;border:none;font-family:inherit}
+        .btn-secondary{background:var(--warm);color:var(--medium);border:2px solid var(--border)}
+        .btn-secondary:hover{background:var(--border)}
+        .btn-primary{background:linear-gradient(135deg,var(--gold),var(--brown-light));color:#fff;box-shadow:0 4px 14px rgba(184,149,110,.35)}
+        .btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(184,149,110,.45)}
+        .result-container{display:none}
+        .result-container.active{display:block}
+        .result-header{background:linear-gradient(135deg,var(--brown),var(--brown-light));border-radius:18px 18px 0 0;padding:35px;color:#fff;text-align:center}
+        .result-header h2{font-size:24px;margin-bottom:10px}
+        .result-header p{opacity:.9;font-size:14px}
+        .result-body{background:var(--card);border-radius:0 0 18px 18px;padding:35px;box-shadow:0 6px 24px rgba(92,74,61,.1)}
+        .recommendation-badge{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:linear-gradient(135deg,var(--gold),var(--brown-light));color:#fff;border-radius:25px;font-size:13px;font-weight:600;margin-bottom:20px}
+        .result-section{margin-bottom:28px}
+        .result-section-title{font-size:16px;font-weight:700;color:var(--brown);margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--border)}
+        .result-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+        .result-item:last-child{border-bottom:none}
+        .result-icon{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px}
+        .result-icon.check{background:rgba(107,142,107,.15);color:var(--success)}
+        .result-icon.warning{background:rgba(196,146,90,.15);color:var(--warning)}
+        .result-icon.danger{background:rgba(166,93,93,.15);color:var(--danger)}
+        .result-text{font-size:13px;color:var(--medium);line-height:1.6}
+        .result-text strong{color:var(--brown)}
+        .cta-section{background:rgba(184,149,110,.12);border-radius:14px;padding:28px;text-align:center;margin-top:28px}
+        .cta-section h3{font-size:18px;color:var(--brown);margin-bottom:10px}
+        .cta-section p{font-size:13px;color:var(--medium);margin-bottom:16px}
+        .cta-phone{font-size:28px;font-weight:700;color:var(--brown);margin-bottom:6px}
+        .cta-hours{font-size:12px;color:var(--light)}
+        .info-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:24px}
+        .info-card{background:var(--warm);border-radius:12px;padding:20px}
+        .info-card-title{font-size:14px;font-weight:600;color:var(--brown);margin-bottom:10px}
+        .info-card-content{font-size:12px;color:var(--medium);line-height:1.7}
+        .footer{background:var(--brown);color:#fff;padding:35px 20px;text-align:center}
+        .footer p{font-size:12px;opacity:.8;margin-bottom:6px}
+        .footer-contact{font-size:18px;font-weight:700;margin-top:12px}
+        .disclaimer{background:var(--warm);border-radius:10px;padding:16px;margin-top:20px;font-size:11px;color:var(--light);line-height:1.7}
+        @media(max-width:768px){.header-content{flex-direction:column;gap:12px;text-align:center}.contact-info{text-align:center}.hero h1{font-size:22px}.section-card{padding:24px}.checkbox-grid,.radio-grid{grid-template-columns:1fr}.nav-buttons{flex-direction:column;gap:10px}.btn{width:100%}.step-label{font-size:10px}}
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 80'%3E%3Ctext x='10' y='50' font-family='Georgia, serif' font-size='36' font-weight='bold' fill='%235C4A3D'%3EJLP%3C/text%3E%3Ctext x='10' y='70' font-family='sans-serif' font-size='12' fill='%235C4A3D'%3E법무법인 JLP%3C/text%3E%3C/svg%3E" alt="법무법인 JLP" style="height:55px;">
+            <div class="contact-info">
+                <div class="contact-label">무료상담 전화번호</div>
+                <div class="contact-number">1670-7309</div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>법인회생 · 법인파산 자가진단</h1>
+        <p>귀사의 현재 상황을 체크해 주시면, 기업회생 또는 파산 절차의 적합성과 예상 결과를 안내해 드립니다.</p>
+    </section>
+
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="progress-steps">
+                <div class="progress-line" id="progressLine"></div>
+                <div class="step active" data-step="1"><div class="step-number">1</div><div class="step-label">기업정보</div></div>
+                <div class="step" data-step="2"><div class="step-number">2</div><div class="step-label">재무상태</div></div>
+                <div class="step" data-step="3"><div class="step-number">3</div><div class="step-label">채무구조</div></div>
+                <div class="step" data-step="4"><div class="step-number">4</div><div class="step-label">체납/위험</div></div>
+                <div class="step" data-step="5"><div class="step-number">5</div><div class="step-label">회생가능성</div></div>
+                <div class="step" data-step="6"><div class="step-number">6</div><div class="step-label">결과확인</div></div>
+            </div>
+        </div>
+    </div>
+
+    <main class="main-content">
+        <!-- Section 1: 기본 기업 정보 -->
+        <div class="section-card active" id="section1">
+            <h2 class="section-title"><span class="icon">A</span>기본 기업 정보</h2>
+            <p class="section-subtitle">귀사의 기본적인 정보를 선택해 주세요.</p>
+            <div class="form-group">
+                <label class="form-label">법인 형태 <span class="required">*</span></label>
+                <div class="radio-grid">
+                    <div class="radio-item"><input type="radio" name="companyType" id="type1" value="주식회사"><label class="radio-label" for="type1"><span class="radio-icon"></span>주식회사</label></div>
+                    <div class="radio-item"><input type="radio" name="companyType" id="type2" value="유한회사"><label class="radio-label" for="type2"><span class="radio-icon"></span>유한회사</label></div>
+                    <div class="radio-item"><input type="radio" name="companyType" id="type3" value="개인사업자"><label class="radio-label" for="type3"><span class="radio-icon"></span>개인사업자</label></div>
+                    <div class="radio-item"><input type="radio" name="companyType" id="type4" value="기타"><label class="radio-label" for="type4"><span class="radio-icon"></span>기타</label></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">현재 영업 상태 <span class="required">*</span></label>
+                <div class="radio-grid">
+                    <div class="radio-item"><input type="radio" name="businessStatus" id="status1" value="정상"><label class="radio-label" for="status1"><span class="radio-icon"></span>정상 영업 중</label></div>
+                    <div class="radio-item"><input type="radio" name="businessStatus" id="status2" value="축소"><label class="radio-label" for="status2"><span class="radio-icon"></span>영업 축소 중</label></div>
+                    <div class="radio-item"><input type="radio" name="businessStatus" id="status3" value="휴업"><label class="radio-label" for="status3"><span class="radio-icon"></span>사실상 휴업</label></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">주요 업종 <span class="required">*</span></label>
+                <div class="checkbox-grid">
+                    <div class="checkbox-item"><input type="checkbox" name="industry" id="ind1" value="제조"><label class="checkbox-label" for="ind1"><span class="check-icon"></span>제조업</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="industry" id="ind2" value="유통"><label class="checkbox-label" for="ind2"><span class="check-icon"></span>유통/도소매</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="industry" id="ind3" value="건설"><label class="checkbox-label" for="ind3"><span class="check-icon"></span>건설업</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="industry" id="ind4" value="IT"><label class="checkbox-label" for="ind4"><span class="check-icon"></span>IT/소프트웨어</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="industry" id="ind5" value="폐기물"><label class="checkbox-label" for="ind5"><span class="check-icon"></span>폐기물/환경</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="industry" id="ind6" value="서비스"><label class="checkbox-label" for="ind6"><span class="check-icon"></span>서비스업</label></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">임직원 수</label>
+                <div class="radio-grid">
+                    <div class="radio-item"><input type="radio" name="employees" id="emp1" value="5인 미만"><label class="radio-label" for="emp1"><span class="radio-icon"></span>5인 미만</label></div>
+                    <div class="radio-item"><input type="radio" name="employees" id="emp2" value="5~20인"><label class="radio-label" for="emp2"><span class="radio-icon"></span>5~20인</label></div>
+                    <div class="radio-item"><input type="radio" name="employees" id="emp3" value="20~50인"><label class="radio-label" for="emp3"><span class="radio-icon"></span>20~50인</label></div>
+                    <div class="radio-item"><input type="radio" name="employees" id="emp4" value="50인 이상"><label class="radio-label" for="emp4"><span class="radio-icon"></span>50인 이상</label></div>
+                </div>
+            </div>
+            <div class="nav-buttons"><div></div><button class="btn btn-primary" onclick="nextSection(1)">다음 단계 →</button></div>
+        </div>
+
+        <!-- Section 2: 재무 상태 -->
+        <div class="section-card" id="section2">
+            <h2 class="section-title"><span class="icon">B</span>재무 상태</h2>
+            <p class="section-subtitle">현재 귀사의 재무 상황을 선택해 주세요. (핵심 판단 요소)</p>
+            <div class="form-group">
+                <label class="form-label">총 자산 규모 <span class="required">*</span></label>
+                <div class="radio-grid">
+                    <div class="radio-item"><input type="radio" name="totalAssets" id="asset1" value="1억 미만"><label class="radio-label" for="asset1"><span class="radio-icon"></span>1억원 미만</label></div>
+                    <div class="radio-item"><input type="radio" name="totalAssets" id="asset2" value="1억~5억"><label class="radio-label" for="asset2"><span class="radio-icon"></span>1억~5억원</label></div>
+                    <div class="radio-item"><input type="radio" name="totalAssets" id="asset3" value="5억~20억"><label class="radio-label" for="asset3"><span class="radio-icon"></span>5억~20억원</label></div>
+                    <div class="radio-item"><input type="radio" name="totalAssets" id="asset4" value="20억 이상"><label class="radio-label" for="asset4"><span class="radio-icon"></span>20억원 이상</label></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">총 부채 규모 <span class="required">*</span></label>
+                <div class="radio-grid">
+                    <div class="radio-item"><input type="radio" name="totalDebt" id="debt1" value="5억 미만"><label class="radio-label" for="debt1"><span class="radio-icon"></span>5억원 미만</label></div>
+                    <div class="radio-item"><input type="radio" name="totalDebt" id="debt2" value="5억~10억"><label class="radio-label" for="debt2"><span class="radio-icon"></span>5억~10억원</label></div>
+                    <div class="radio-item"><input type="radio" name="totalDebt" id="debt3" value="10억~30억"><label class="radio-label" for="debt3"><span class="radio-icon"></span>10억~30억원</label></div>
+                    <div class="radio-item"><input type="radio" name="totalDebt" id="debt4" value="30억 이상"><label class="radio-label" for="debt4"><span class="radio-icon"></span>30억원 이상</label></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">최근 3개년 매출 추이</label>
+                <div class="radio-grid">
+                    <div class="radio-item"><input type="radio" name="salesTrend" id="st1" value="증가"><label class="radio-label" for="st1"><span class="radio-icon"></span>지속 증가</label></div>
+                    <div class="radio-item"><input type="radio" name="salesTrend" id="st2" value="유지"><label class="radio-label" for="st2"><span class="radio-icon"></span>비슷한 수준</label></div>
+                    <div class="radio-item"><input type="radio" name="salesTrend" id="st3" value="감소"><label class="radio-label" for="st3"><span class="radio-icon"></span>지속 감소</label></div>
+                    <div class="radio-item"><input type="radio" name="salesTrend" id="st4" value="급감"><label class="radio-label" for="st4"><span class="radio-icon"></span>급격히 감소</label></div>
+                </div>
+            </div>
+            <div class="info-box"><span class="icon">💡</span><p>재무 상태는 회생 또는 파산 절차 선택의 핵심 판단 기준입니다.</p></div>
+            <div class="nav-buttons"><button class="btn btn-secondary" onclick="prevSection(2)">← 이전</button><button class="btn btn-primary" onclick="nextSection(2)">다음 단계 →</button></div>
+        </div>
+        <!-- Section 3: 채무 구조 -->
+        <div class="section-card" id="section3">
+            <h2 class="section-title"><span class="icon">C</span>채무 구조</h2>
+            <p class="section-subtitle">현재 귀사의 채무 현황을 선택해 주세요.</p>
+            <div class="form-group">
+                <label class="form-label">금융권 채무 (해당 항목 모두 선택) <span class="required">*</span></label>
+                <div class="checkbox-grid">
+                    <div class="checkbox-item"><input type="checkbox" name="finDebt" id="fd1" value="은행대출"><label class="checkbox-label" for="fd1"><span class="check-icon"></span>은행 대출</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="finDebt" id="fd2" value="정책자금"><label class="checkbox-label" for="fd2"><span class="check-icon"></span>정책자금(기보/신보)</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="finDebt" id="fd3" value="카드/캐피탈"><label class="checkbox-label" for="fd3"><span class="check-icon"></span>카드사/캐피탈</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="finDebt" id="fd4" value="대부업"><label class="checkbox-label" for="fd4"><span class="check-icon"></span>대부업체/사채</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="finDebt" id="fd5" value="리스"><label class="checkbox-label" for="fd5"><span class="check-icon"></span>리스/렌탈</label></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">비금융권 채무 (해당 항목 모두 선택)</label>
+                <div class="checkbox-grid">
+                    <div class="checkbox-item"><input type="checkbox" name="nonFinDebt" id="nfd1" value="거래처미지급"><label class="checkbox-label" for="nfd1"><span class="check-icon"></span>거래처 미지급금</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="nonFinDebt" id="nfd2" value="임대료체납"><label class="checkbox-label" for="nfd2"><span class="check-icon"></span>임대료 체납</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="nonFinDebt" id="nfd3" value="급여체불"><label class="checkbox-label" for="nfd3"><span class="check-icon"></span>직원 급여 체불</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="nonFinDebt" id="nfd4" value="개인차입"><label class="checkbox-label" for="nfd4"><span class="check-icon"></span>지인/개인 차입금</label></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">보증 관계 <span class="required">*</span></label>
+                <div class="checkbox-grid">
+                    <div class="checkbox-item"><input type="checkbox" name="guarantee" id="g1" value="대표자보증"><label class="checkbox-label" for="g1"><span class="check-icon"></span>대표자 개인보증 있음</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="guarantee" id="g2" value="연대보증"><label class="checkbox-label" for="g2"><span class="check-icon"></span>연대보증인 존재</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="guarantee" id="g3" value="담보설정"><label class="checkbox-label" for="g3"><span class="check-icon"></span>부동산/기계 담보</label></div>
+                </div>
+            </div>
+            <div class="warning-box"><span class="icon">⚠️</span><p><strong>대표자 개인보증이 있는 경우</strong>, 법인 회생/파산과 별도로 대표자 개인에 대한 채무 정리가 필요할 수 있습니다.</p></div>
+            <div class="nav-buttons"><button class="btn btn-secondary" onclick="prevSection(3)">← 이전</button><button class="btn btn-primary" onclick="nextSection(3)">다음 단계 →</button></div>
+        </div>
+
+        <!-- Section 4: 체납 및 법적 위험 -->
+        <div class="section-card" id="section4">
+            <h2 class="section-title"><span class="icon">D</span>체납 및 법적 위험</h2>
+            <p class="section-subtitle">현재 체납 현황 및 법적 위험 상황을 선택해 주세요.</p>
+            <div class="form-group">
+                <label class="form-label">국세/지방세 체납 여부 <span class="required">*</span></label>
+                <div class="checkbox-grid">
+                    <div class="checkbox-item"><input type="checkbox" name="taxDelinquency" id="tax1" value="부가세"><label class="checkbox-label" for="tax1"><span class="check-icon"></span>부가가치세 체납</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="taxDelinquency" id="tax2" value="법인세"><label class="checkbox-label" for="tax2"><span class="check-icon"></span>법인세 체납</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="taxDelinquency" id="tax3" value="지방세"><label class="checkbox-label" for="tax3"><span class="check-icon"></span>지방세 체납</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="taxDelinquency" id="tax4" value="4대보험"><label class="checkbox-label" for="tax4"><span class="check-icon"></span>4대보험 체납</label></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">압류·강제집행 여부 <span class="required">*</span></label>
+                <div class="radio-grid">
+                    <div class="radio-item"><input type="radio" name="seizure" id="sz1" value="있음"><label class="radio-label" for="sz1"><span class="radio-icon"></span>압류/가압류 진행 중</label></div>
+                    <div class="radio-item"><input type="radio" name="seizure" id="sz2" value="경매"><label class="radio-label" for="sz2"><span class="radio-icon"></span>경매 진행 중</label></div>
+                    <div class="radio-item"><input type="radio" name="seizure" id="sz3" value="예정"><label class="radio-label" for="sz3"><span class="radio-icon"></span>압류/경매 예정</label></div>
+                    <div class="radio-item"><input type="radio" name="seizure" id="sz4" value="없음"><label class="radio-label" for="sz4"><span class="radio-icon"></span>해당 없음</label></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">소송 진행 여부</label>
+                <div class="checkbox-grid">
+                    <div class="checkbox-item"><input type="checkbox" name="lawsuit" id="law1" value="채권추심"><label class="checkbox-label" for="law1"><span class="check-icon"></span>채권추심 소송 중</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="lawsuit" id="law2" value="지급명령"><label class="checkbox-label" for="law2"><span class="check-icon"></span>지급명령 신청됨</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="lawsuit" id="law3" value="기타소송"><label class="checkbox-label" for="law3"><span class="check-icon"></span>기타 민사소송 중</label></div>
+                </div>
+            </div>
+            <div class="warning-box"><span class="icon">⚠️</span><p><strong>경매 또는 강제집행이 진행 중인 경우</strong>, 신속한 회생절차 신청으로 중지 명령을 받을 수 있습니다. 빠른 상담을 권장드립니다.</p></div>
+            <div class="nav-buttons"><button class="btn btn-secondary" onclick="prevSection(4)">← 이전</button><button class="btn btn-primary" onclick="nextSection(4)">다음 단계 →</button></div>
+        </div>
+        <!-- Section 5: 회생 가능성 판단 요소 -->
+        <div class="section-card" id="section5">
+            <h2 class="section-title"><span class="icon">E</span>회생 가능성 판단 요소</h2>
+            <p class="section-subtitle">사업 지속 가능성을 판단하기 위한 정보를 선택해 주세요.</p>
+            <div class="form-group">
+                <label class="form-label">계속기업가치 vs 청산가치 <span class="required">*</span></label>
+                <div class="radio-grid">
+                    <div class="radio-item"><input type="radio" name="goingConcern" id="gc1" value="계속기업"><label class="radio-label" for="gc1"><span class="radio-icon"></span>사업 지속 시 더 가치 있음</label></div>
+                    <div class="radio-item"><input type="radio" name="goingConcern" id="gc2" value="청산"><label class="radio-label" for="gc2"><span class="radio-icon"></span>청산 시 더 가치 있음</label></div>
+                    <div class="radio-item"><input type="radio" name="goingConcern" id="gc3" value="모름"><label class="radio-label" for="gc3"><span class="radio-icon"></span>판단이 어려움</label></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">현재 수주/계약 유지 여부</label>
+                <div class="radio-grid">
+                    <div class="radio-item"><input type="radio" name="contracts" id="con1" value="다수유지"><label class="radio-label" for="con1"><span class="radio-icon"></span>다수의 계약 유지 중</label></div>
+                    <div class="radio-item"><input type="radio" name="contracts" id="con2" value="일부유지"><label class="radio-label" for="con2"><span class="radio-icon"></span>일부 계약만 유지</label></div>
+                    <div class="radio-item"><input type="radio" name="contracts" id="con3" value="거의없음"><label class="radio-label" for="con3"><span class="radio-icon"></span>거의 없음</label></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">대표자의 사업 지속 의지 <span class="required">*</span></label>
+                <div class="radio-grid">
+                    <div class="radio-item"><input type="radio" name="willingness" id="will1" value="강함"><label class="radio-label" for="will1"><span class="radio-icon"></span>사업 지속 의지 강함</label></div>
+                    <div class="radio-item"><input type="radio" name="willingness" id="will2" value="조건부"><label class="radio-label" for="will2"><span class="radio-icon"></span>조건에 따라 고려</label></div>
+                    <div class="radio-item"><input type="radio" name="willingness" id="will3" value="정리희망"><label class="radio-label" for="will3"><span class="radio-icon"></span>정리하고 싶음</label></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">사업 재건의 강점 (해당 항목 선택)</label>
+                <div class="checkbox-grid">
+                    <div class="checkbox-item"><input type="checkbox" name="strength" id="str1" value="기술력"><label class="checkbox-label" for="str1"><span class="check-icon"></span>독보적 기술력 보유</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="strength" id="str2" value="인허가"><label class="checkbox-label" for="str2"><span class="check-icon"></span>희소 인허가 보유</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="strength" id="str3" value="거래처"><label class="checkbox-label" for="str3"><span class="check-icon"></span>안정적 거래처 확보</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="strength" id="str4" value="인력"><label class="checkbox-label" for="str4"><span class="check-icon"></span>숙련된 인력 보유</label></div>
+                </div>
+            </div>
+            <div class="info-box"><span class="icon">💡</span><p><strong>회생절차는 사업 지속 가치가 청산 가치보다 높을 때</strong> 선택합니다. 핵심 거래처, 기술력, 인허가 등은 회생 인가에 중요한 요소입니다.</p></div>
+            <div class="nav-buttons"><button class="btn btn-secondary" onclick="prevSection(5)">← 이전</button><button class="btn btn-primary" onclick="showResult()">진단 결과 확인 →</button></div>
+        </div>
+
+        <!-- Result Section -->
+        <div class="result-container" id="resultSection">
+            <div class="result-header">
+                <h2>자가진단 결과</h2>
+                <p>입력하신 정보를 바탕으로 분석한 결과입니다.</p>
+            </div>
+            <div class="result-body">
+                <div class="result-section" id="rehabilitationResult" style="display:none;">
+                    <div class="recommendation-badge">📋 기업회생 절차 권장</div>
+                    <h3 class="result-section-title">기업회생 절차 안내</h3>
+                    <div class="result-item"><div class="result-icon check">✓</div><div class="result-text"><strong>예상 변제율 범위:</strong> 귀사의 경우 채권자 변제율 20~40% 범위로 추정됩니다.</div></div>
+                    <div class="result-item"><div class="result-icon check">✓</div><div class="result-text"><strong>강제집행·압류 중지:</strong> 회생절차 개시 시 모든 강제집행, 압류가 중지됩니다.</div></div>
+                    <div class="result-item"><div class="result-icon check">✓</div><div class="result-text"><strong>세금·4대보험 징수 유예:</strong> 체납세금 및 4대보험 징수가 유예됩니다.</div></div>
+                    <div class="result-item"><div class="result-icon check">✓</div><div class="result-text"><strong>채무 변제 유예:</strong> 개시결정부터 인가 전까지 채무 변제가 유예됩니다.</div></div>
+                    <div class="result-item"><div class="result-icon warning">!</div><div class="result-text"><strong>대표자 개인보증:</strong> 개인보증 채무는 별도 대응이 필요합니다.</div></div>
+                </div>
+                <div class="result-section" id="bankruptcyResult" style="display:none;">
+                    <div class="recommendation-badge">📋 기업파산 절차 권장</div>
+                    <h3 class="result-section-title">기업파산 절차 안내</h3>
+                    <div class="result-item"><div class="result-icon check">✓</div><div class="result-text"><strong>법인 채무 전액 소멸:</strong> 청산 후 법인의 모든 채무가 소멸됩니다.</div></div>
+                    <div class="result-item"><div class="result-icon check">✓</div><div class="result-text"><strong>거래처·금융권 채권 종결:</strong> 모든 채권관계가 법적으로 종결됩니다.</div></div>
+                    <div class="result-item"><div class="result-icon check">✓</div><div class="result-text"><strong>체납세금 정리:</strong> 법인 기준 체납세금도 정리됩니다.</div></div>
+                    <div class="result-item"><div class="result-icon check">✓</div><div class="result-text"><strong>추가 채권추심 차단:</strong> 영업 종료에 따른 법적 안정성이 확보됩니다.</div></div>
+                    <div class="result-item"><div class="result-icon danger">!</div><div class="result-text"><strong>대표자 개인책임:</strong> 개인보증 채무는 별도로 개인회생/파산 절차가 필요합니다.</div></div>
+                </div>
+                <div class="result-section">
+                    <h3 class="result-section-title">추가 안내사항</h3>
+                    <div class="result-item"><div class="result-icon warning">!</div><div class="result-text"><strong>긴급 상황 시:</strong> 경매나 강제집행이 진행 중인 경우, 신속한 회생신청으로 중지 명령을 받을 수 있습니다.</div></div>
+                    <div class="result-item"><div class="result-icon warning">!</div><div class="result-text"><strong>급여 체불:</strong> 임금채권은 회생/파산 모두에서 우선변제 대상입니다.</div></div>
+                    <div class="result-item"><div class="result-icon warning">!</div><div class="result-text"><strong>비용 안내:</strong> 회생/파산 절차 비용, 예납금 등 상세 내용은 상담 시 안내드립니다.</div></div>
+                </div>
+                <div class="info-cards">
+                    <div class="info-card"><div class="info-card-title">📌 절차 소요 기간</div><div class="info-card-content">• 기업회생: 개시결정까지 약 1~2개월, 인가까지 약 6개월~1년<br>• 기업파산: 선고까지 약 2~3개월, 청산 완료까지 6개월~1년</div></div>
+                    <div class="info-card"><div class="info-card-title">📌 준비 서류</div><div class="info-card-content">• 법인등기부등본, 재무제표, 채권자목록<br>• 부동산등기부등본, 임대차계약서<br>• 금융거래확인서, 체납세금 내역 등</div></div>
+                </div>
+                <div class="cta-section">
+                    <h3>전문 변호사 무료상담</h3>
+                    <p>정확한 진단과 최적의 솔루션을 위해 전문 상담을 받아보세요.</p>
+                    <div class="cta-phone">1670-7309</div>
+                    <div class="cta-hours">평일 09:00 ~ 18:00 | 토요일 09:00 ~ 13:00</div>
+                </div>
+                <div class="disclaimer"><strong>※ 면책 고지:</strong> 본 자가진단 결과는 입력하신 정보를 기반으로 한 일반적인 안내이며, 법률적 조언이 아닙니다. 정확한 판단을 위해서는 반드시 전문 변호사와의 상담이 필요합니다.</div>
+                <div class="nav-buttons"><button class="btn btn-secondary" onclick="resetForm()">처음부터 다시하기</button><button class="btn btn-primary" onclick="window.print()">결과 인쇄하기</button></div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <p>법무법인 JLP | 서울특별시 서초구</p>
+        <p>대표변호사 장동훈, 정유진</p>
+        <div class="footer-contact">무료상담 1670-7309</div>
+    </footer>
+
+    <script>
+        let currentSection = 1;
+        const totalSections = 5;
+
+        function updateProgress() {
+            const progressLine = document.getElementById('progressLine');
+            const steps = document.querySelectorAll('.step');
+            const progressPercent = ((currentSection - 1) / totalSections) * 84;
+            progressLine.style.width = progressPercent + '%';
+            steps.forEach((step, index) => {
+                step.classList.remove('active', 'completed');
+                if (index + 1 < currentSection) step.classList.add('completed');
+                else if (index + 1 === currentSection) step.classList.add('active');
+            });
+        }
+
+        function nextSection(current) {
+            document.getElementById('section' + current).classList.remove('active');
+            currentSection = current + 1;
+            document.getElementById('section' + currentSection).classList.add('active');
+            updateProgress();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function prevSection(current) {
+            document.getElementById('section' + current).classList.remove('active');
+            currentSection = current - 1;
+            document.getElementById('section' + currentSection).classList.add('active');
+            updateProgress();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showResult() {
+            document.getElementById('section5').classList.remove('active');
+            document.getElementById('resultSection').classList.add('active');
+            const steps = document.querySelectorAll('.step');
+            steps.forEach(step => step.classList.add('completed'));
+            steps[5].classList.remove('completed');
+            steps[5].classList.add('active');
+            document.getElementById('progressLine').style.width = '84%';
+
+            const willingness = document.querySelector('input[name="willingness"]:checked');
+            const businessStatus = document.querySelector('input[name="businessStatus"]:checked');
+            const goingConcern = document.querySelector('input[name="goingConcern"]:checked');
+            
+            let recommendRehabilitation = true;
+            if (willingness && willingness.value === '정리희망') recommendRehabilitation = false;
+            if (businessStatus && businessStatus.value === '휴업') recommendRehabilitation = false;
+            if (goingConcern && goingConcern.value === '청산') recommendRehabilitation = false;
+
+            if (recommendRehabilitation) {
+                document.getElementById('rehabilitationResult').style.display = 'block';
+                document.getElementById('bankruptcyResult').style.display = 'none';
+            } else {
+                document.getElementById('rehabilitationResult').style.display = 'none';
+                document.getElementById('bankruptcyResult').style.display = 'block';
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetForm() {
+            document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
+            document.querySelectorAll('input[type="checkbox"]').forEach(el => el.checked = false);
+            document.getElementById('resultSection').classList.remove('active');
+            currentSection = 1;
+            document.getElementById('section1').classList.add('active');
+            updateProgress();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        updateProgress();
+    </script>
+</body>
+</html>

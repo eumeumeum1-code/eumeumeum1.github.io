@@ -98,7 +98,95 @@
         .footer p{font-size:12px;opacity:.8;margin-bottom:6px}
         .footer-contact{font-size:18px;font-weight:700;margin-top:12px}
         .disclaimer{background:var(--warm);border-radius:10px;padding:16px;margin-top:20px;font-size:11px;color:var(--light);line-height:1.7}
-        @media(max-width:768px){.header-content{flex-direction:column;gap:12px;text-align:center}.contact-info{text-align:center}.hero h1{font-size:22px}.section-card{padding:24px}.checkbox-grid,.radio-grid{grid-template-columns:1fr}.nav-buttons{flex-direction:column;gap:10px}.btn{width:100%}.step-label{font-size:10px}}
+        
+        /* 기타사항 입력란 스타일 */
+        .textarea-container{margin-top:20px}
+        .form-textarea{width:100%;min-height:80px;padding:14px 16px;border:2px solid var(--border);border-radius:10px;font-family:inherit;font-size:13px;color:var(--dark);background:var(--warm);resize:vertical;transition:all .2s}
+        .form-textarea:focus{outline:none;border-color:var(--gold);background:var(--card)}
+        .form-textarea::placeholder{color:var(--light)}
+        
+        /* 텍스트 입력란 스타일 */
+        .form-input{width:100%;padding:14px 16px;border:2px solid var(--border);border-radius:10px;font-family:inherit;font-size:14px;color:var(--dark);background:var(--warm);transition:all .2s}
+        .form-input:focus{outline:none;border-color:var(--gold);background:var(--card)}
+        .form-input::placeholder{color:var(--light)}
+        
+        /* 개인정보 동의 스타일 */
+        .privacy-agreement{margin-top:24px;padding:20px;background:var(--warm);border-radius:12px;border:1px solid var(--border)}
+        .privacy-detail{margin-top:12px;padding:12px;background:var(--card);border-radius:8px;font-size:11px;color:var(--light);line-height:1.8}
+        .privacy-detail p{margin-bottom:4px}
+        .privacy-detail strong{color:var(--medium)}
+        
+        /* 상담 요청 버튼 스타일 */
+        .submit-buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:20px 0}
+        .btn-submit{background:linear-gradient(135deg,var(--brown),var(--brown-light));color:#fff;padding:16px 32px;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;border:none;transition:all .25s;box-shadow:0 4px 14px rgba(92,74,61,.3)}
+        .btn-submit:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(92,74,61,.4)}
+        .btn-submit-alt{background:var(--card);color:var(--brown);padding:16px 32px;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;border:2px solid var(--gold);transition:all .25s}
+        .btn-submit-alt:hover{background:var(--warm)}
+        .submit-note{font-size:11px;color:var(--light);line-height:1.6;text-align:center}
+        
+        /* 상담 섹션 스타일 */
+        .consultation-section{background:var(--card);border-radius:18px;overflow:hidden;box-shadow:0 6px 24px rgba(92,74,61,.1);margin:30px 0}
+        .consultation-header{background:linear-gradient(135deg,var(--gold),var(--brown-light));padding:25px 30px;text-align:center;color:#fff}
+        .consultation-header h3{font-size:18px;margin-bottom:8px}
+        .consultation-header p{font-size:13px;opacity:.9}
+        .consultation-form{padding:30px}
+        .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+        @media(max-width:600px){.form-row{grid-template-columns:1fr}}
+        
+        /* 빠른 상담 스타일 */
+        .quick-contact{background:rgba(184,149,110,.1);border:2px dashed var(--gold);border-radius:14px;padding:20px;margin:0 30px 20px;text-align:center}
+        .quick-contact-title{font-size:14px;font-weight:700;color:var(--brown);margin-bottom:15px}
+        .quick-contact-items{display:flex;justify-content:center;gap:20px;flex-wrap:wrap}
+        .quick-contact-item{display:flex;flex-direction:column;align-items:center;padding:15px 25px;background:var(--card);border-radius:12px;text-decoration:none;transition:all .2s;border:2px solid transparent}
+        .quick-contact-item:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 4px 12px rgba(92,74,61,.15)}
+        .quick-icon{font-size:24px;margin-bottom:6px}
+        .quick-label{font-size:11px;color:var(--light);margin-bottom:4px}
+        .quick-number{font-size:16px;font-weight:700;color:var(--brown)}
+        
+        /* 보고서 스타일 */
+        .report-container{background:var(--card);border-radius:18px;overflow:hidden;box-shadow:0 6px 24px rgba(92,74,61,.1);margin-bottom:30px}
+        .report-header{background:linear-gradient(135deg,var(--brown),var(--brown-light));padding:30px 35px;color:#fff}
+        .report-title{font-size:22px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:12px}
+        .report-subtitle{font-size:13px;opacity:.85}
+        .report-date{font-size:12px;opacity:.7;margin-top:10px}
+        .report-body{padding:30px 35px}
+        .report-section{margin-bottom:25px;padding-bottom:25px;border-bottom:1px dashed var(--border)}
+        .report-section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+        .report-section-header{display:flex;align-items:center;gap:10px;margin-bottom:15px}
+        .report-section-number{width:28px;height:28px;background:var(--gold);color:#fff;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+        .report-section-title{font-size:15px;font-weight:700;color:var(--brown)}
+        .report-table{width:100%;border-collapse:collapse}
+        .report-table th,.report-table td{padding:10px 12px;text-align:left;font-size:13px;border-bottom:1px solid var(--border)}
+        .report-table th{background:var(--warm);color:var(--medium);font-weight:600;width:35%}
+        .report-table td{color:var(--dark)}
+        .report-table tr:last-child th,.report-table tr:last-child td{border-bottom:none}
+        .report-note{background:var(--warm);border-radius:8px;padding:12px 14px;font-size:12px;color:var(--medium);margin-top:10px;font-style:italic}
+        .report-recommendation{background:linear-gradient(135deg,rgba(184,149,110,.15),rgba(184,149,110,.05));border:2px solid var(--gold);border-radius:14px;padding:25px;margin:25px 0}
+        .report-recommendation-title{font-size:16px;font-weight:700;color:var(--brown);margin-bottom:15px;display:flex;align-items:center;gap:8px}
+        .report-recommendation-content{font-size:13px;color:var(--medium);line-height:1.8}
+        .report-recommendation-content ul{margin:10px 0 0 20px}
+        .report-recommendation-content li{margin-bottom:6px}
+        .report-summary-box{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;margin-top:20px}
+        .summary-item{background:var(--warm);border-radius:10px;padding:15px}
+        .summary-label{font-size:11px;color:var(--light);margin-bottom:4px}
+        .summary-value{font-size:14px;font-weight:600;color:var(--brown)}
+        .risk-indicator{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:15px;font-size:11px;font-weight:600}
+        .risk-high{background:rgba(166,93,93,.15);color:var(--danger)}
+        .risk-medium{background:rgba(196,146,90,.15);color:var(--warning)}
+        .risk-low{background:rgba(107,142,107,.15);color:var(--success)}
+        
+        /* 7열 그리드 */
+        .radio-grid-7{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+        
+        @media(max-width:768px){.header-content{flex-direction:column;gap:12px;text-align:center}.contact-info{text-align:center}.hero h1{font-size:22px}.section-card{padding:24px}.checkbox-grid,.radio-grid,.radio-grid-7{grid-template-columns:1fr}.nav-buttons{flex-direction:column;gap:10px}.btn{width:100%}.step-label{font-size:10px}.report-table th{width:40%}}
+        
+        @media print{
+            body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+            .header,.hero,.progress-container,.nav-buttons,.cta-section,.footer{display:none!important}
+            .result-container{display:block!important}
+            .report-container{box-shadow:none;border:1px solid var(--border)}
+            .report-header{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+        }
     </style>
 </head>
 <body>
@@ -162,6 +250,7 @@
                     <div class="checkbox-item"><input type="checkbox" name="industry" id="ind4" value="IT"><label class="checkbox-label" for="ind4"><span class="check-icon"></span>IT/소프트웨어</label></div>
                     <div class="checkbox-item"><input type="checkbox" name="industry" id="ind5" value="폐기물"><label class="checkbox-label" for="ind5"><span class="check-icon"></span>폐기물/환경</label></div>
                     <div class="checkbox-item"><input type="checkbox" name="industry" id="ind6" value="서비스"><label class="checkbox-label" for="ind6"><span class="check-icon"></span>서비스업</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="industry" id="ind7" value="기타"><label class="checkbox-label" for="ind7"><span class="check-icon"></span>기타</label></div>
                 </div>
             </div>
             <div class="form-group">
@@ -173,6 +262,10 @@
                     <div class="radio-item"><input type="radio" name="employees" id="emp4" value="50인 이상"><label class="radio-label" for="emp4"><span class="radio-icon"></span>50인 이상</label></div>
                 </div>
             </div>
+            <div class="textarea-container">
+                <label class="form-label">기타사항 (회사명, 설립연도, 특이사항 등)</label>
+                <textarea class="form-textarea" name="note1" id="note1" placeholder="회사명, 설립연도, 업력, 주요 사업 내용 등 추가로 알려주실 내용을 자유롭게 입력해 주세요."></textarea>
+            </div>
             <div class="nav-buttons"><div></div><button class="btn btn-primary" onclick="nextSection(1)">다음 단계 →</button></div>
         </div>
 
@@ -182,20 +275,38 @@
             <p class="section-subtitle">현재 귀사의 재무 상황을 선택해 주세요. (핵심 판단 요소)</p>
             <div class="form-group">
                 <label class="form-label">총 자산 규모 <span class="required">*</span></label>
-                <div class="radio-grid">
-                    <div class="radio-item"><input type="radio" name="totalAssets" id="asset1" value="1억 미만"><label class="radio-label" for="asset1"><span class="radio-icon"></span>1억원 미만</label></div>
-                    <div class="radio-item"><input type="radio" name="totalAssets" id="asset2" value="1억~5억"><label class="radio-label" for="asset2"><span class="radio-icon"></span>1억~5억원</label></div>
-                    <div class="radio-item"><input type="radio" name="totalAssets" id="asset3" value="5억~20억"><label class="radio-label" for="asset3"><span class="radio-icon"></span>5억~20억원</label></div>
-                    <div class="radio-item"><input type="radio" name="totalAssets" id="asset4" value="20억 이상"><label class="radio-label" for="asset4"><span class="radio-icon"></span>20억원 이상</label></div>
+                <div class="radio-grid-7">
+                    <div class="radio-item"><input type="radio" name="totalAssets" id="asset1" value="5억 이하"><label class="radio-label" for="asset1"><span class="radio-icon"></span>5억원 이하</label></div>
+                    <div class="radio-item"><input type="radio" name="totalAssets" id="asset2" value="5억~10억"><label class="radio-label" for="asset2"><span class="radio-icon"></span>5억~10억원</label></div>
+                    <div class="radio-item"><input type="radio" name="totalAssets" id="asset3" value="10억~20억"><label class="radio-label" for="asset3"><span class="radio-icon"></span>10억~20억원</label></div>
+                    <div class="radio-item"><input type="radio" name="totalAssets" id="asset4" value="20억~30억"><label class="radio-label" for="asset4"><span class="radio-icon"></span>20억~30억원</label></div>
+                    <div class="radio-item"><input type="radio" name="totalAssets" id="asset5" value="30억~50억"><label class="radio-label" for="asset5"><span class="radio-icon"></span>30억~50억원</label></div>
+                    <div class="radio-item"><input type="radio" name="totalAssets" id="asset6" value="50억~100억"><label class="radio-label" for="asset6"><span class="radio-icon"></span>50억~100억원</label></div>
+                    <div class="radio-item"><input type="radio" name="totalAssets" id="asset7" value="100억 이상"><label class="radio-label" for="asset7"><span class="radio-icon"></span>100억원 이상</label></div>
                 </div>
             </div>
             <div class="form-group">
                 <label class="form-label">총 부채 규모 <span class="required">*</span></label>
-                <div class="radio-grid">
-                    <div class="radio-item"><input type="radio" name="totalDebt" id="debt1" value="5억 미만"><label class="radio-label" for="debt1"><span class="radio-icon"></span>5억원 미만</label></div>
+                <div class="radio-grid-7">
+                    <div class="radio-item"><input type="radio" name="totalDebt" id="debt1" value="5억 이하"><label class="radio-label" for="debt1"><span class="radio-icon"></span>5억원 이하</label></div>
                     <div class="radio-item"><input type="radio" name="totalDebt" id="debt2" value="5억~10억"><label class="radio-label" for="debt2"><span class="radio-icon"></span>5억~10억원</label></div>
-                    <div class="radio-item"><input type="radio" name="totalDebt" id="debt3" value="10억~30억"><label class="radio-label" for="debt3"><span class="radio-icon"></span>10억~30억원</label></div>
-                    <div class="radio-item"><input type="radio" name="totalDebt" id="debt4" value="30억 이상"><label class="radio-label" for="debt4"><span class="radio-icon"></span>30억원 이상</label></div>
+                    <div class="radio-item"><input type="radio" name="totalDebt" id="debt3" value="10억~20억"><label class="radio-label" for="debt3"><span class="radio-icon"></span>10억~20억원</label></div>
+                    <div class="radio-item"><input type="radio" name="totalDebt" id="debt4" value="20억~30억"><label class="radio-label" for="debt4"><span class="radio-icon"></span>20억~30억원</label></div>
+                    <div class="radio-item"><input type="radio" name="totalDebt" id="debt5" value="30억~50억"><label class="radio-label" for="debt5"><span class="radio-icon"></span>30억~50억원</label></div>
+                    <div class="radio-item"><input type="radio" name="totalDebt" id="debt6" value="50억~100억"><label class="radio-label" for="debt6"><span class="radio-icon"></span>50억~100억원</label></div>
+                    <div class="radio-item"><input type="radio" name="totalDebt" id="debt7" value="100억 이상"><label class="radio-label" for="debt7"><span class="radio-icon"></span>100억원 이상</label></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">연간 매출 규모 <span class="required">*</span></label>
+                <div class="radio-grid-7">
+                    <div class="radio-item"><input type="radio" name="annualSales" id="sales1" value="5억 이하"><label class="radio-label" for="sales1"><span class="radio-icon"></span>5억원 이하</label></div>
+                    <div class="radio-item"><input type="radio" name="annualSales" id="sales2" value="5억~10억"><label class="radio-label" for="sales2"><span class="radio-icon"></span>5억~10억원</label></div>
+                    <div class="radio-item"><input type="radio" name="annualSales" id="sales3" value="10억~20억"><label class="radio-label" for="sales3"><span class="radio-icon"></span>10억~20억원</label></div>
+                    <div class="radio-item"><input type="radio" name="annualSales" id="sales4" value="20억~30억"><label class="radio-label" for="sales4"><span class="radio-icon"></span>20억~30억원</label></div>
+                    <div class="radio-item"><input type="radio" name="annualSales" id="sales5" value="30억~50억"><label class="radio-label" for="sales5"><span class="radio-icon"></span>30억~50억원</label></div>
+                    <div class="radio-item"><input type="radio" name="annualSales" id="sales6" value="50억~100억"><label class="radio-label" for="sales6"><span class="radio-icon"></span>50억~100억원</label></div>
+                    <div class="radio-item"><input type="radio" name="annualSales" id="sales7" value="100억 이상"><label class="radio-label" for="sales7"><span class="radio-icon"></span>100억원 이상</label></div>
                 </div>
             </div>
             <div class="form-group">
@@ -207,9 +318,23 @@
                     <div class="radio-item"><input type="radio" name="salesTrend" id="st4" value="급감"><label class="radio-label" for="st4"><span class="radio-icon"></span>급격히 감소</label></div>
                 </div>
             </div>
+            <div class="form-group">
+                <label class="form-label">월 이자비용 (원금 포함) <span class="required">*</span></label>
+                <div class="radio-grid">
+                    <div class="radio-item"><input type="radio" name="monthlyInterest" id="int1" value="500만원 이하"><label class="radio-label" for="int1"><span class="radio-icon"></span>500만원 이하</label></div>
+                    <div class="radio-item"><input type="radio" name="monthlyInterest" id="int2" value="500~1000만원"><label class="radio-label" for="int2"><span class="radio-icon"></span>500~1,000만원</label></div>
+                    <div class="radio-item"><input type="radio" name="monthlyInterest" id="int3" value="1000~2000만원"><label class="radio-label" for="int3"><span class="radio-icon"></span>1,000~2,000만원</label></div>
+                    <div class="radio-item"><input type="radio" name="monthlyInterest" id="int4" value="2000만원 이상"><label class="radio-label" for="int4"><span class="radio-icon"></span>2,000만원 이상</label></div>
+                </div>
+            </div>
+            <div class="textarea-container">
+                <label class="form-label">기타사항 (구체적인 금액, 자산/부채 상세 등)</label>
+                <textarea class="form-textarea" name="note2" id="note2" placeholder="구체적인 자산/부채 금액, 주요 자산 내역(부동산, 기계장치 등), 연간 매출액 등을 입력해 주세요."></textarea>
+            </div>
             <div class="info-box"><span class="icon">💡</span><p>재무 상태는 회생 또는 파산 절차 선택의 핵심 판단 기준입니다.</p></div>
             <div class="nav-buttons"><button class="btn btn-secondary" onclick="prevSection(2)">← 이전</button><button class="btn btn-primary" onclick="nextSection(2)">다음 단계 →</button></div>
         </div>
+
         <!-- Section 3: 채무 구조 -->
         <div class="section-card" id="section3">
             <h2 class="section-title"><span class="icon">C</span>채무 구조</h2>
@@ -234,12 +359,25 @@
                 </div>
             </div>
             <div class="form-group">
+                <label class="form-label">회생 담보채무 (해당 항목 모두 선택)</label>
+                <div class="checkbox-grid">
+                    <div class="checkbox-item"><input type="checkbox" name="securedDebt" id="sd1" value="근저당"><label class="checkbox-label" for="sd1"><span class="check-icon"></span>근저당권 설정</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="securedDebt" id="sd2" value="질권"><label class="checkbox-label" for="sd2"><span class="check-icon"></span>질권 설정</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="securedDebt" id="sd3" value="양도담보"><label class="checkbox-label" for="sd3"><span class="check-icon"></span>양도담보</label></div>
+                    <div class="checkbox-item"><input type="checkbox" name="securedDebt" id="sd4" value="유치권"><label class="checkbox-label" for="sd4"><span class="check-icon"></span>유치권</label></div>
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="form-label">보증 관계 <span class="required">*</span></label>
                 <div class="checkbox-grid">
                     <div class="checkbox-item"><input type="checkbox" name="guarantee" id="g1" value="대표자보증"><label class="checkbox-label" for="g1"><span class="check-icon"></span>대표자 개인보증 있음</label></div>
                     <div class="checkbox-item"><input type="checkbox" name="guarantee" id="g2" value="연대보증"><label class="checkbox-label" for="g2"><span class="check-icon"></span>연대보증인 존재</label></div>
                     <div class="checkbox-item"><input type="checkbox" name="guarantee" id="g3" value="담보설정"><label class="checkbox-label" for="g3"><span class="check-icon"></span>부동산/기계 담보</label></div>
                 </div>
+            </div>
+            <div class="textarea-container">
+                <label class="form-label">기타사항 (주요 채권자, 채무 상세 내역 등)</label>
+                <textarea class="form-textarea" name="note3" id="note3" placeholder="주요 채권자(은행명, 거래처명 등), 채권별 대략적인 금액, 연체 기간 등을 입력해 주세요."></textarea>
             </div>
             <div class="warning-box"><span class="icon">⚠️</span><p><strong>대표자 개인보증이 있는 경우</strong>, 법인 회생/파산과 별도로 대표자 개인에 대한 채무 정리가 필요할 수 있습니다.</p></div>
             <div class="nav-buttons"><button class="btn btn-secondary" onclick="prevSection(3)">← 이전</button><button class="btn btn-primary" onclick="nextSection(3)">다음 단계 →</button></div>
@@ -275,9 +413,14 @@
                     <div class="checkbox-item"><input type="checkbox" name="lawsuit" id="law3" value="기타소송"><label class="checkbox-label" for="law3"><span class="check-icon"></span>기타 민사소송 중</label></div>
                 </div>
             </div>
+            <div class="textarea-container">
+                <label class="form-label">기타사항 (체납 금액, 소송 상세 등)</label>
+                <textarea class="form-textarea" name="note4" id="note4" placeholder="체납 세금 금액, 압류된 재산 내역, 진행 중인 소송의 상대방 및 청구금액 등을 입력해 주세요."></textarea>
+            </div>
             <div class="warning-box"><span class="icon">⚠️</span><p><strong>경매 또는 강제집행이 진행 중인 경우</strong>, 신속한 회생절차 신청으로 중지 명령을 받을 수 있습니다. 빠른 상담을 권장드립니다.</p></div>
             <div class="nav-buttons"><button class="btn btn-secondary" onclick="prevSection(4)">← 이전</button><button class="btn btn-primary" onclick="nextSection(4)">다음 단계 →</button></div>
         </div>
+
         <!-- Section 5: 회생 가능성 판단 요소 -->
         <div class="section-card" id="section5">
             <h2 class="section-title"><span class="icon">E</span>회생 가능성 판단 요소</h2>
@@ -307,6 +450,16 @@
                 </div>
             </div>
             <div class="form-group">
+                <label class="form-label">보증보험 가입 필수 여부 <span class="required">*</span></label>
+                <div class="radio-grid">
+                    <div class="radio-item"><input type="radio" name="suretyBond" id="sb1" value="필수"><label class="radio-label" for="sb1"><span class="radio-icon"></span>법인 유지에 필수</label></div>
+                    <div class="radio-item"><input type="radio" name="suretyBond" id="sb2" value="일부필요"><label class="radio-label" for="sb2"><span class="radio-icon"></span>일부 사업에만 필요</label></div>
+                    <div class="radio-item"><input type="radio" name="suretyBond" id="sb3" value="불필요"><label class="radio-label" for="sb3"><span class="radio-icon"></span>필요 없음</label></div>
+                    <div class="radio-item"><input type="radio" name="suretyBond" id="sb4" value="모름"><label class="radio-label" for="sb4"><span class="radio-icon"></span>잘 모르겠음</label></div>
+                </div>
+                <div class="info-box" style="margin-top:12px"><span class="icon">💡</span><p>건설업, 폐기물업 등은 보증보험 가입이 인허가 유지에 필수인 경우가 많습니다. 회생 시 보증보험 발급 가능 여부가 중요합니다.</p></div>
+            </div>
+            <div class="form-group">
                 <label class="form-label">사업 재건의 강점 (해당 항목 선택)</label>
                 <div class="checkbox-grid">
                     <div class="checkbox-item"><input type="checkbox" name="strength" id="str1" value="기술력"><label class="checkbox-label" for="str1"><span class="check-icon"></span>독보적 기술력 보유</label></div>
@@ -315,56 +468,215 @@
                     <div class="checkbox-item"><input type="checkbox" name="strength" id="str4" value="인력"><label class="checkbox-label" for="str4"><span class="check-icon"></span>숙련된 인력 보유</label></div>
                 </div>
             </div>
+            <div class="textarea-container">
+                <label class="form-label">기타사항 (사업 전망, 회생 계획 등)</label>
+                <textarea class="form-textarea" name="note5" id="note5" placeholder="향후 사업 전망, 주요 거래처와의 관계, 보유 인허가 내역, 회생 후 계획 등을 입력해 주세요."></textarea>
+            </div>
             <div class="info-box"><span class="icon">💡</span><p><strong>회생절차는 사업 지속 가치가 청산 가치보다 높을 때</strong> 선택합니다. 핵심 거래처, 기술력, 인허가 등은 회생 인가에 중요한 요소입니다.</p></div>
             <div class="nav-buttons"><button class="btn btn-secondary" onclick="prevSection(5)">← 이전</button><button class="btn btn-primary" onclick="showResult()">진단 결과 확인 →</button></div>
         </div>
 
         <!-- Result Section -->
         <div class="result-container" id="resultSection">
-            <div class="result-header">
-                <h2>자가진단 결과</h2>
-                <p>입력하신 정보를 바탕으로 분석한 결과입니다.</p>
+            <!-- 보고서 형식 결과 -->
+            <div class="report-container">
+                <div class="report-header">
+                    <div class="report-title">📋 법인회생/파산 자가진단 보고서</div>
+                    <div class="report-subtitle">법무법인 JLP | 기업 구조조정 전문</div>
+                    <div class="report-date" id="reportDate"></div>
+                </div>
+                <div class="report-body">
+                    <!-- 진단 요약 -->
+                    <div class="report-section">
+                        <div class="report-section-header">
+                            <div class="report-section-number">1</div>
+                            <div class="report-section-title">진단 요약</div>
+                        </div>
+                        <div class="report-summary-box" id="summaryBox">
+                            <!-- 동적으로 생성 -->
+                        </div>
+                    </div>
+
+                    <!-- 기업 기본 정보 -->
+                    <div class="report-section">
+                        <div class="report-section-header">
+                            <div class="report-section-number">2</div>
+                            <div class="report-section-title">기업 기본 정보</div>
+                        </div>
+                        <table class="report-table" id="section1Table">
+                            <!-- 동적으로 생성 -->
+                        </table>
+                        <div class="report-note" id="note1Display" style="display:none;"></div>
+                    </div>
+
+                    <!-- 재무 상태 -->
+                    <div class="report-section">
+                        <div class="report-section-header">
+                            <div class="report-section-number">3</div>
+                            <div class="report-section-title">재무 상태</div>
+                        </div>
+                        <table class="report-table" id="section2Table">
+                            <!-- 동적으로 생성 -->
+                        </table>
+                        <div class="report-note" id="note2Display" style="display:none;"></div>
+                    </div>
+
+                    <!-- 채무 구조 -->
+                    <div class="report-section">
+                        <div class="report-section-header">
+                            <div class="report-section-number">4</div>
+                            <div class="report-section-title">채무 구조</div>
+                        </div>
+                        <table class="report-table" id="section3Table">
+                            <!-- 동적으로 생성 -->
+                        </table>
+                        <div class="report-note" id="note3Display" style="display:none;"></div>
+                    </div>
+
+                    <!-- 체납 및 법적 위험 -->
+                    <div class="report-section">
+                        <div class="report-section-header">
+                            <div class="report-section-number">5</div>
+                            <div class="report-section-title">체납 및 법적 위험</div>
+                        </div>
+                        <table class="report-table" id="section4Table">
+                            <!-- 동적으로 생성 -->
+                        </table>
+                        <div class="report-note" id="note4Display" style="display:none;"></div>
+                    </div>
+
+                    <!-- 회생 가능성 판단 -->
+                    <div class="report-section">
+                        <div class="report-section-header">
+                            <div class="report-section-number">6</div>
+                            <div class="report-section-title">회생 가능성 판단</div>
+                        </div>
+                        <table class="report-table" id="section5Table">
+                            <!-- 동적으로 생성 -->
+                        </table>
+                        <div class="report-note" id="note5Display" style="display:none;"></div>
+                    </div>
+
+                    <!-- 종합 진단 결과 -->
+                    <div class="report-recommendation" id="recommendationBox">
+                        <!-- 동적으로 생성 -->
+                    </div>
+
+                    <!-- 절차 안내 -->
+                    <div class="info-cards">
+                        <div class="info-card"><div class="info-card-title">📌 절차 소요 기간</div><div class="info-card-content">• 기업회생: 개시결정까지 약 1~2개월, 인가까지 약 6개월~1년<br>• 기업파산: 선고까지 약 2~3개월, 청산 완료까지 6개월~1년</div></div>
+                        <div class="info-card"><div class="info-card-title">📌 준비 서류</div><div class="info-card-content">• 법인등기부등본, 재무제표, 채권자목록<br>• 부동산등기부등본, 임대차계약서<br>• 금융거래확인서, 체납세금 내역 등</div></div>
+                    </div>
+
+                    <div class="cta-section">
+                        <h3>전문 변호사 무료상담</h3>
+                        <p>정확한 진단과 최적의 솔루션을 위해 전문 상담을 받아보세요.</p>
+                        <div class="cta-phone">1670-7309</div>
+                        <div class="cta-hours">평일 09:00 ~ 18:00 | 토요일 09:00 ~ 13:00</div>
+                    </div>
+
+                    <div class="disclaimer"><strong>※ 면책 고지:</strong> 본 자가진단 결과는 입력하신 정보를 기반으로 한 일반적인 안내이며, 법률적 조언이 아닙니다. 정확한 판단을 위해서는 반드시 전문 변호사와의 상담이 필요합니다. 본 보고서의 내용은 상담 참고용으로만 활용해 주시기 바랍니다.</div>
+                </div>
             </div>
-            <div class="result-body">
-                <div class="result-section" id="rehabilitationResult" style="display:none;">
-                    <div class="recommendation-badge">📋 기업회생 절차 권장</div>
-                    <h3 class="result-section-title">기업회생 절차 안내</h3>
-                    <div class="result-item"><div class="result-icon check">✓</div><div class="result-text"><strong>예상 변제율 범위:</strong> 귀사의 경우 채권자 변제율 20~40% 범위로 추정됩니다.</div></div>
-                    <div class="result-item"><div class="result-icon check">✓</div><div class="result-text"><strong>강제집행·압류 중지:</strong> 회생절차 개시 시 모든 강제집행, 압류가 중지됩니다.</div></div>
-                    <div class="result-item"><div class="result-icon check">✓</div><div class="result-text"><strong>세금·4대보험 징수 유예:</strong> 체납세금 및 4대보험 징수가 유예됩니다.</div></div>
-                    <div class="result-item"><div class="result-icon check">✓</div><div class="result-text"><strong>채무 변제 유예:</strong> 개시결정부터 인가 전까지 채무 변제가 유예됩니다.</div></div>
-                    <div class="result-item"><div class="result-icon warning">!</div><div class="result-text"><strong>대표자 개인보증:</strong> 개인보증 채무는 별도 대응이 필요합니다.</div></div>
+
+            <!-- 상담 요청 섹션 (상담자 정보 입력) -->
+            <div class="consultation-section">
+                <div class="consultation-header">
+                    <h3>📞 구체적인 상담을 원하시면 상담 정보를 남겨주세요</h3>
+                    <p>전문 변호사가 확인 후 연락드리겠습니다.</p>
                 </div>
-                <div class="result-section" id="bankruptcyResult" style="display:none;">
-                    <div class="recommendation-badge">📋 기업파산 절차 권장</div>
-                    <h3 class="result-section-title">기업파산 절차 안내</h3>
-                    <div class="result-item"><div class="result-icon check">✓</div><div class="result-text"><strong>법인 채무 전액 소멸:</strong> 청산 후 법인의 모든 채무가 소멸됩니다.</div></div>
-                    <div class="result-item"><div class="result-icon check">✓</div><div class="result-text"><strong>거래처·금융권 채권 종결:</strong> 모든 채권관계가 법적으로 종결됩니다.</div></div>
-                    <div class="result-item"><div class="result-icon check">✓</div><div class="result-text"><strong>체납세금 정리:</strong> 법인 기준 체납세금도 정리됩니다.</div></div>
-                    <div class="result-item"><div class="result-icon check">✓</div><div class="result-text"><strong>추가 채권추심 차단:</strong> 영업 종료에 따른 법적 안정성이 확보됩니다.</div></div>
-                    <div class="result-item"><div class="result-icon danger">!</div><div class="result-text"><strong>대표자 개인책임:</strong> 개인보증 채무는 별도로 개인회생/파산 절차가 필요합니다.</div></div>
+                
+                <div class="quick-contact">
+                    <div class="quick-contact-title">⚡ 빠른 상담</div>
+                    <div class="quick-contact-items">
+                        <a href="tel:02-1670-7309" class="quick-contact-item">
+                            <span class="quick-icon">📞</span>
+                            <span class="quick-label">대표전화</span>
+                            <span class="quick-number">02-1670-7309</span>
+                        </a>
+                        <a href="tel:010-7548-7712" class="quick-contact-item">
+                            <span class="quick-icon">📱</span>
+                            <span class="quick-label">핸드폰</span>
+                            <span class="quick-number">010-7548-7712</span>
+                        </a>
+                    </div>
                 </div>
-                <div class="result-section">
-                    <h3 class="result-section-title">추가 안내사항</h3>
-                    <div class="result-item"><div class="result-icon warning">!</div><div class="result-text"><strong>긴급 상황 시:</strong> 경매나 강제집행이 진행 중인 경우, 신속한 회생신청으로 중지 명령을 받을 수 있습니다.</div></div>
-                    <div class="result-item"><div class="result-icon warning">!</div><div class="result-text"><strong>급여 체불:</strong> 임금채권은 회생/파산 모두에서 우선변제 대상입니다.</div></div>
-                    <div class="result-item"><div class="result-icon warning">!</div><div class="result-text"><strong>비용 안내:</strong> 회생/파산 절차 비용, 예납금 등 상세 내용은 상담 시 안내드립니다.</div></div>
+
+                <div class="consultation-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">성함 <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="clientName" name="clientName" placeholder="홍길동">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">연락처 <span class="required">*</span></label>
+                            <input type="tel" class="form-input" id="clientPhone" name="clientPhone" placeholder="010-1234-5678">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">이메일</label>
+                            <input type="email" class="form-input" id="clientEmail" name="clientEmail" placeholder="example@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">회사명</label>
+                            <input type="text" class="form-input" id="companyNameInput" name="companyNameInput" placeholder="주식회사 OOO">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">직위/직책</label>
+                        <input type="text" class="form-input" id="clientPosition" name="clientPosition" placeholder="대표이사, 이사, 재무담당 등">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">상담 가능 시간 <span class="required">*</span></label>
+                        <div class="checkbox-grid">
+                            <div class="checkbox-item"><input type="checkbox" name="availableTime" id="time1" value="오전(9-12시)"><label class="checkbox-label" for="time1"><span class="check-icon"></span>오전 (9~12시)</label></div>
+                            <div class="checkbox-item"><input type="checkbox" name="availableTime" id="time2" value="오후(12-15시)"><label class="checkbox-label" for="time2"><span class="check-icon"></span>오후 (12~15시)</label></div>
+                            <div class="checkbox-item"><input type="checkbox" name="availableTime" id="time3" value="오후(15-18시)"><label class="checkbox-label" for="time3"><span class="check-icon"></span>오후 (15~18시)</label></div>
+                            <div class="checkbox-item"><input type="checkbox" name="availableTime" id="time4" value="저녁(18시이후)"><label class="checkbox-label" for="time4"><span class="check-icon"></span>저녁 (18시 이후)</label></div>
+                            <div class="checkbox-item"><input type="checkbox" name="availableTime" id="time5" value="언제든가능"><label class="checkbox-label" for="time5"><span class="check-icon"></span>언제든 가능</label></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">선호하는 연락 방법</label>
+                        <div class="radio-grid">
+                            <div class="radio-item"><input type="radio" name="contactMethod" id="cm1" value="전화"><label class="radio-label" for="cm1"><span class="radio-icon"></span>전화 상담</label></div>
+                            <div class="radio-item"><input type="radio" name="contactMethod" id="cm2" value="문자/카톡"><label class="radio-label" for="cm2"><span class="radio-icon"></span>문자/카카오톡</label></div>
+                            <div class="radio-item"><input type="radio" name="contactMethod" id="cm3" value="이메일"><label class="radio-label" for="cm3"><span class="radio-icon"></span>이메일</label></div>
+                            <div class="radio-item"><input type="radio" name="contactMethod" id="cm4" value="방문상담"><label class="radio-label" for="cm4"><span class="radio-icon"></span>방문 상담</label></div>
+                        </div>
+                    </div>
+                    
+                    <div class="privacy-agreement">
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="privacyAgree" id="privacyAgree">
+                            <label class="checkbox-label" for="privacyAgree">
+                                <span class="check-icon"></span>
+                                <span>[필수] 개인정보 수집 및 이용에 동의합니다.</span>
+                            </label>
+                        </div>
+                        <div class="privacy-detail">
+                            <p><strong>수집 항목:</strong> 성함, 연락처, 이메일, 회사명, 직위</p>
+                            <p><strong>수집 목적:</strong> 법률 상담 및 안내, 상담 일정 조율</p>
+                            <p><strong>보유 기간:</strong> 상담 완료 후 1년 또는 동의 철회 시까지</p>
+                        </div>
+                    </div>
+
+                    <div class="submit-buttons">
+                        <button class="btn btn-submit" onclick="sendEmailReport()">📧 이메일로 상담 요청</button>
+                        <button class="btn btn-submit-alt" onclick="copyReportToClipboard()">📋 내용 복사하기</button>
+                    </div>
+                    <p class="submit-note">* 이메일 버튼 클릭 시 기본 메일 앱이 열립니다.<br>* 복사 버튼으로 카카오톡이나 문자로 전송할 수 있습니다.</p>
                 </div>
-                <div class="info-cards">
-                    <div class="info-card"><div class="info-card-title">📌 절차 소요 기간</div><div class="info-card-content">• 기업회생: 개시결정까지 약 1~2개월, 인가까지 약 6개월~1년<br>• 기업파산: 선고까지 약 2~3개월, 청산 완료까지 6개월~1년</div></div>
-                    <div class="info-card"><div class="info-card-title">📌 준비 서류</div><div class="info-card-content">• 법인등기부등본, 재무제표, 채권자목록<br>• 부동산등기부등본, 임대차계약서<br>• 금융거래확인서, 체납세금 내역 등</div></div>
-                </div>
-                <div class="cta-section">
-                    <h3>전문 변호사 무료상담</h3>
-                    <p>정확한 진단과 최적의 솔루션을 위해 전문 상담을 받아보세요.</p>
-                    <div class="cta-phone">1670-7309</div>
-                    <div class="cta-hours">평일 09:00 ~ 18:00 | 토요일 09:00 ~ 13:00</div>
-                </div>
-                <div class="disclaimer"><strong>※ 면책 고지:</strong> 본 자가진단 결과는 입력하신 정보를 기반으로 한 일반적인 안내이며, 법률적 조언이 아닙니다. 정확한 판단을 위해서는 반드시 전문 변호사와의 상담이 필요합니다.</div>
-                <div class="nav-buttons"><button class="btn btn-secondary" onclick="resetForm()">처음부터 다시하기</button><button class="btn btn-primary" onclick="window.print()">결과 인쇄하기</button></div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="resetForm()">처음부터 다시하기</button>
+                <button class="btn btn-primary" onclick="window.print()">보고서 인쇄하기</button>
             </div>
         </div>
     </main>
+
     <footer class="footer">
         <p>법무법인 JLP | 서울특별시 서초구</p>
         <p>대표변호사 장동훈, 정유진</p>
@@ -403,6 +715,406 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        function getRadioValue(name) {
+            const el = document.querySelector(`input[name="${name}"]:checked`);
+            return el ? el.value : '-';
+        }
+
+        function getCheckboxValues(name) {
+            const els = document.querySelectorAll(`input[name="${name}"]:checked`);
+            if (els.length === 0) return '-';
+            return Array.from(els).map(el => el.value).join(', ');
+        }
+
+        function getTextValue(id) {
+            const el = document.getElementById(id);
+            return el ? el.value.trim() : '';
+        }
+
+        function getInputValue(id) {
+            const el = document.getElementById(id);
+            return el ? el.value.trim() : '-';
+        }
+
+        function validateConsultationForm() {
+            const name = document.getElementById('clientName').value.trim();
+            const phone = document.getElementById('clientPhone').value.trim();
+            const availableTime = document.querySelectorAll('input[name="availableTime"]:checked');
+            const privacyAgree = document.getElementById('privacyAgree').checked;
+            
+            if (!name) {
+                alert('성함을 입력해 주세요.');
+                document.getElementById('clientName').focus();
+                return false;
+            }
+            if (!phone) {
+                alert('연락처를 입력해 주세요.');
+                document.getElementById('clientPhone').focus();
+                return false;
+            }
+            if (availableTime.length === 0) {
+                alert('상담 가능 시간을 선택해 주세요.');
+                return false;
+            }
+            if (!privacyAgree) {
+                alert('개인정보 수집 및 이용에 동의해 주세요.');
+                return false;
+            }
+            return true;
+        }
+
+        function generateReportData() {
+            const now = new Date();
+            const dateStr = `${now.getFullYear()}년 ${now.getMonth() + 1}월 ${now.getDate()}일 ${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
+            
+            // 상담자 정보
+            const clientInfo = {
+                name: getInputValue('clientName'),
+                phone: getInputValue('clientPhone'),
+                email: getInputValue('clientEmail') || '-',
+                availableTime: getCheckboxValues('availableTime'),
+                contactMethod: getRadioValue('contactMethod'),
+                companyName: getInputValue('companyNameInput') || '-',
+                position: getInputValue('clientPosition') || '-'
+            };
+            
+            // 기업 정보
+            const companyInfo = {
+                type: getRadioValue('companyType'),
+                status: getRadioValue('businessStatus'),
+                industry: getCheckboxValues('industry'),
+                employees: getRadioValue('employees'),
+                note: getTextValue('note1')
+            };
+            
+            // 재무 상태
+            const financialInfo = {
+                assets: getRadioValue('totalAssets'),
+                debt: getRadioValue('totalDebt'),
+                sales: getRadioValue('annualSales'),
+                salesTrend: getRadioValue('salesTrend'),
+                monthlyInterest: getRadioValue('monthlyInterest'),
+                note: getTextValue('note2')
+            };
+            
+            // 채무 구조
+            const debtStructure = {
+                financial: getCheckboxValues('finDebt'),
+                nonFinancial: getCheckboxValues('nonFinDebt'),
+                secured: getCheckboxValues('securedDebt'),
+                guarantee: getCheckboxValues('guarantee'),
+                note: getTextValue('note3')
+            };
+            
+            // 체납 및 법적 위험
+            const legalRisk = {
+                tax: getCheckboxValues('taxDelinquency'),
+                seizure: getRadioValue('seizure'),
+                lawsuit: getCheckboxValues('lawsuit'),
+                note: getTextValue('note4')
+            };
+            
+            // 회생 가능성
+            const rehabilitation = {
+                goingConcern: getRadioValue('goingConcern'),
+                contracts: getRadioValue('contracts'),
+                willingness: getRadioValue('willingness'),
+                suretyBond: getRadioValue('suretyBond'),
+                strength: getCheckboxValues('strength'),
+                note: getTextValue('note5')
+            };
+            
+            // 권장 절차 판단
+            let recommendRehabilitation = true;
+            if (rehabilitation.willingness === '정리희망') recommendRehabilitation = false;
+            if (companyInfo.status === '휴업') recommendRehabilitation = false;
+            if (rehabilitation.goingConcern === '청산') recommendRehabilitation = false;
+            
+            return {
+                date: dateStr,
+                client: clientInfo,
+                company: companyInfo,
+                financial: financialInfo,
+                debtStructure: debtStructure,
+                legalRisk: legalRisk,
+                rehabilitation: rehabilitation,
+                recommendation: recommendRehabilitation ? '기업회생' : '기업파산'
+            };
+        }
+
+        function generateEmailBody(data) {
+            let body = `
+========================================
+📋 법인회생/파산 자가진단 상담 요청
+========================================
+작성일시: ${data.date}
+
+【 상담자 정보 】
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• 성함: ${data.client.name}
+• 연락처: ${data.client.phone}
+• 이메일: ${data.client.email}
+• 회사명: ${data.client.companyName}
+• 직위: ${data.client.position}
+• 상담 가능 시간: ${data.client.availableTime}
+• 선호 연락 방법: ${data.client.contactMethod}
+
+【 기업 기본 정보 】
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• 법인 형태: ${data.company.type}
+• 영업 상태: ${data.company.status}
+• 주요 업종: ${data.company.industry}
+• 임직원 수: ${data.company.employees}
+${data.company.note ? `• 기타사항: ${data.company.note}` : ''}
+
+【 재무 상태 】
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• 총 자산: ${data.financial.assets}
+• 총 부채: ${data.financial.debt}
+• 연간 매출: ${data.financial.sales}
+• 매출 추이: ${data.financial.salesTrend}
+• 월 이자비용: ${data.financial.monthlyInterest}
+${data.financial.note ? `• 기타사항: ${data.financial.note}` : ''}
+
+【 채무 구조 】
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• 금융권 채무: ${data.debtStructure.financial}
+• 비금융권 채무: ${data.debtStructure.nonFinancial}
+• 담보채무: ${data.debtStructure.secured}
+• 보증 관계: ${data.debtStructure.guarantee}
+${data.debtStructure.note ? `• 기타사항: ${data.debtStructure.note}` : ''}
+
+【 체납 및 법적 위험 】
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• 세금 체납: ${data.legalRisk.tax}
+• 압류/강제집행: ${data.legalRisk.seizure}
+• 소송 진행: ${data.legalRisk.lawsuit}
+${data.legalRisk.note ? `• 기타사항: ${data.legalRisk.note}` : ''}
+
+【 회생 가능성 판단 】
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• 계속기업가치: ${data.rehabilitation.goingConcern}
+• 수주/계약 유지: ${data.rehabilitation.contracts}
+• 사업 지속 의지: ${data.rehabilitation.willingness}
+• 보증보험 필수: ${data.rehabilitation.suretyBond}
+• 사업 재건 강점: ${data.rehabilitation.strength}
+${data.rehabilitation.note ? `• 기타사항: ${data.rehabilitation.note}` : ''}
+
+========================================
+📌 자가진단 결과: ${data.recommendation} 절차 권장
+========================================
+`;
+            return body;
+        }
+
+        function sendEmailReport() {
+            if (!validateConsultationForm()) return;
+            
+            const data = generateReportData();
+            const subject = `[JLP 자가진단] ${data.client.name}님 - ${data.client.companyName} 상담 요청`;
+            const body = generateEmailBody(data);
+            
+            // mailto 링크로 이메일 클라이언트 열기
+            const mailtoLink = `mailto:jlp_law@naver.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.open(mailtoLink);
+        }
+
+        function copyReportToClipboard() {
+            if (!validateConsultationForm()) return;
+            
+            const data = generateReportData();
+            const body = generateEmailBody(data);
+            
+            navigator.clipboard.writeText(body).then(() => {
+                alert('상담 내용이 클립보드에 복사되었습니다.\n이메일이나 카카오톡으로 붙여넣기 하실 수 있습니다.');
+            }).catch(err => {
+                // 클립보드 API 실패 시 대체 방법
+                const textArea = document.createElement('textarea');
+                textArea.value = body;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('상담 내용이 클립보드에 복사되었습니다.\n이메일이나 카카오톡으로 붙여넣기 하실 수 있습니다.');
+            });
+        }
+
+        function generateReport() {
+            // 날짜 설정
+            const now = new Date();
+            const dateStr = `${now.getFullYear()}년 ${now.getMonth() + 1}월 ${now.getDate()}일 ${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')} 작성`;
+            document.getElementById('reportDate').textContent = dateStr;
+
+            // 권장 절차 판단
+            const willingness = getRadioValue('willingness');
+            const businessStatus = getRadioValue('businessStatus');
+            const goingConcern = getRadioValue('goingConcern');
+            
+            let recommendRehabilitation = true;
+            let riskLevel = 'medium';
+            
+            if (willingness === '정리희망') recommendRehabilitation = false;
+            if (businessStatus === '휴업') recommendRehabilitation = false;
+            if (goingConcern === '청산') recommendRehabilitation = false;
+
+            // 위험도 판단
+            const seizure = getRadioValue('seizure');
+            const taxDelinquency = getCheckboxValues('taxDelinquency');
+            const totalDebt = getRadioValue('totalDebt');
+            
+            if (seizure === '경매' || seizure === '있음') riskLevel = 'high';
+            else if (taxDelinquency !== '-' || totalDebt === '100억 이상' || totalDebt === '50억~100억') riskLevel = 'medium';
+            else riskLevel = 'low';
+
+            // 진단 요약 생성
+            const summaryBox = document.getElementById('summaryBox');
+            const riskText = riskLevel === 'high' ? '긴급' : (riskLevel === 'medium' ? '주의' : '양호');
+            const riskClass = riskLevel === 'high' ? 'risk-high' : (riskLevel === 'medium' ? 'risk-medium' : 'risk-low');
+            
+            const suretyBond = getRadioValue('suretyBond');
+            const suretyBondText = suretyBond === '필수' ? '필수' : (suretyBond === '일부필요' ? '일부 필요' : (suretyBond === '불필요' ? '불필요' : '미확인'));
+            
+            summaryBox.innerHTML = `
+                <div class="summary-item">
+                    <div class="summary-label">권장 절차</div>
+                    <div class="summary-value">${recommendRehabilitation ? '기업회생' : '기업파산'}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">긴급도</div>
+                    <div class="summary-value"><span class="risk-indicator ${riskClass}">● ${riskText}</span></div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">총 부채 규모</div>
+                    <div class="summary-value">${getRadioValue('totalDebt')}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">연간 매출</div>
+                    <div class="summary-value">${getRadioValue('annualSales')}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">영업 상태</div>
+                    <div class="summary-value">${businessStatus === '정상' ? '정상 영업' : (businessStatus === '축소' ? '영업 축소' : '사실상 휴업')}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">보증보험 필수</div>
+                    <div class="summary-value">${suretyBondText}</div>
+                </div>
+            `;
+
+            // Section 1 테이블
+            document.getElementById('section1Table').innerHTML = `
+                <tr><th>법인 형태</th><td>${getRadioValue('companyType')}</td></tr>
+                <tr><th>현재 영업 상태</th><td>${businessStatus === '정상' ? '정상 영업 중' : (businessStatus === '축소' ? '영업 축소 중' : '사실상 휴업')}</td></tr>
+                <tr><th>주요 업종</th><td>${getCheckboxValues('industry')}</td></tr>
+                <tr><th>임직원 수</th><td>${getRadioValue('employees')}</td></tr>
+            `;
+            showNote('note1', 'note1Display');
+
+            // Section 2 테이블
+            const salesTrendText = {
+                '증가': '지속 증가',
+                '유지': '비슷한 수준',
+                '감소': '지속 감소',
+                '급감': '급격히 감소'
+            };
+            document.getElementById('section2Table').innerHTML = `
+                <tr><th>총 자산 규모</th><td>${getRadioValue('totalAssets')}</td></tr>
+                <tr><th>총 부채 규모</th><td>${getRadioValue('totalDebt')}</td></tr>
+                <tr><th>연간 매출 규모</th><td>${getRadioValue('annualSales')}</td></tr>
+                <tr><th>최근 3개년 매출 추이</th><td>${salesTrendText[getRadioValue('salesTrend')] || '-'}</td></tr>
+                <tr><th>월 이자비용 (원금 포함)</th><td>${getRadioValue('monthlyInterest')}</td></tr>
+            `;
+            showNote('note2', 'note2Display');
+
+            // Section 3 테이블
+            document.getElementById('section3Table').innerHTML = `
+                <tr><th>금융권 채무</th><td>${getCheckboxValues('finDebt')}</td></tr>
+                <tr><th>비금융권 채무</th><td>${getCheckboxValues('nonFinDebt')}</td></tr>
+                <tr><th>회생 담보채무</th><td>${getCheckboxValues('securedDebt')}</td></tr>
+                <tr><th>보증 관계</th><td>${getCheckboxValues('guarantee')}</td></tr>
+            `;
+            showNote('note3', 'note3Display');
+
+            // Section 4 테이블
+            const seizureText = seizure === '있음' ? '압류/가압류 진행 중' : (seizure === '경매' ? '경매 진행 중' : (seizure === '예정' ? '압류/경매 예정' : '해당 없음'));
+            document.getElementById('section4Table').innerHTML = `
+                <tr><th>국세/지방세 체납</th><td>${getCheckboxValues('taxDelinquency')}</td></tr>
+                <tr><th>압류·강제집행 여부</th><td>${seizureText}</td></tr>
+                <tr><th>소송 진행 여부</th><td>${getCheckboxValues('lawsuit')}</td></tr>
+            `;
+            showNote('note4', 'note4Display');
+
+            // Section 5 테이블
+            const goingConcernText = goingConcern === '계속기업' ? '사업 지속 시 더 가치 있음' : (goingConcern === '청산' ? '청산 시 더 가치 있음' : '판단이 어려움');
+            const contractsText = getRadioValue('contracts') === '다수유지' ? '다수의 계약 유지 중' : (getRadioValue('contracts') === '일부유지' ? '일부 계약만 유지' : (getRadioValue('contracts') === '거의없음' ? '거의 없음' : '-'));
+            const willingnessText = willingness === '강함' ? '사업 지속 의지 강함' : (willingness === '조건부' ? '조건에 따라 고려' : '정리하고 싶음');
+            const suretyBondFullText = suretyBond === '필수' ? '법인 유지에 필수' : (suretyBond === '일부필요' ? '일부 사업에만 필요' : (suretyBond === '불필요' ? '필요 없음' : '확인 필요'));
+            
+            document.getElementById('section5Table').innerHTML = `
+                <tr><th>계속기업가치 vs 청산가치</th><td>${goingConcernText}</td></tr>
+                <tr><th>현재 수주/계약 유지</th><td>${contractsText}</td></tr>
+                <tr><th>대표자 사업 지속 의지</th><td>${willingnessText}</td></tr>
+                <tr><th>보증보험 가입 필수 여부</th><td>${suretyBondFullText}</td></tr>
+                <tr><th>사업 재건 강점</th><td>${getCheckboxValues('strength')}</td></tr>
+            `;
+            showNote('note5', 'note5Display');
+
+            // 종합 진단 결과
+            const recommendationBox = document.getElementById('recommendationBox');
+            const hasSuretyBondIssue = suretyBond === '필수' || suretyBond === '일부필요';
+            
+            if (recommendRehabilitation) {
+                recommendationBox.innerHTML = `
+                    <div class="report-recommendation-title">📋 종합 진단 결과: 기업회생 절차 권장</div>
+                    <div class="report-recommendation-content">
+                        귀사의 상황을 종합적으로 분석한 결과, <strong>기업회생 절차</strong>가 적합한 것으로 판단됩니다.
+                        <ul>
+                            <li><strong>예상 변제율 범위:</strong> 채권자 변제율 20~40% 범위로 추정됩니다.</li>
+                            <li><strong>강제집행·압류 중지:</strong> 회생절차 개시 시 모든 강제집행, 압류가 중지됩니다.</li>
+                            <li><strong>세금·4대보험 징수 유예:</strong> 체납세금 및 4대보험 징수가 유예됩니다.</li>
+                            <li><strong>채무 변제 유예:</strong> 개시결정부터 인가 전까지 채무 변제가 유예됩니다.</li>
+                            ${getCheckboxValues('guarantee').includes('대표자보증') ? '<li><strong>대표자 개인보증:</strong> 개인보증 채무는 별도 대응(개인회생/파산)이 필요합니다.</li>' : ''}
+                            ${hasSuretyBondIssue ? '<li><strong>보증보험 유의:</strong> 회생절차 중 보증보험 발급이 제한될 수 있으므로, 인허가 유지 방안에 대한 별도 검토가 필요합니다.</li>' : ''}
+                        </ul>
+                    </div>
+                `;
+            } else {
+                recommendationBox.innerHTML = `
+                    <div class="report-recommendation-title">📋 종합 진단 결과: 기업파산 절차 권장</div>
+                    <div class="report-recommendation-content">
+                        귀사의 상황을 종합적으로 분석한 결과, <strong>기업파산 절차</strong>가 적합한 것으로 판단됩니다.
+                        <ul>
+                            <li><strong>법인 채무 전액 소멸:</strong> 청산 후 법인의 모든 채무가 소멸됩니다.</li>
+                            <li><strong>거래처·금융권 채권 종결:</strong> 모든 채권관계가 법적으로 종결됩니다.</li>
+                            <li><strong>체납세금 정리:</strong> 법인 기준 체납세금도 정리됩니다.</li>
+                            <li><strong>추가 채권추심 차단:</strong> 영업 종료에 따른 법적 안정성이 확보됩니다.</li>
+                            ${getCheckboxValues('guarantee').includes('대표자보증') ? '<li><strong>대표자 개인책임:</strong> 개인보증 채무는 별도로 개인회생/파산 절차가 필요합니다.</li>' : ''}
+                        </ul>
+                    </div>
+                `;
+            }
+
+            // 긴급 상황 알림 추가
+            if (riskLevel === 'high') {
+                recommendationBox.innerHTML += `
+                    <div style="margin-top:15px;padding:12px;background:rgba(166,93,93,.1);border-radius:8px;border-left:3px solid var(--danger);">
+                        <strong style="color:var(--danger);">⚠️ 긴급 상황:</strong> <span style="color:var(--medium);font-size:13px;">경매나 강제집행이 진행 중인 경우, 신속한 회생신청으로 중지 명령을 받을 수 있습니다. 빠른 상담을 권장드립니다.</span>
+                    </div>
+                `;
+            }
+        }
+
+        function showNote(inputId, displayId) {
+            const note = getTextValue(inputId);
+            const displayEl = document.getElementById(displayId);
+            if (note) {
+                displayEl.style.display = 'block';
+                displayEl.innerHTML = `<strong>기타사항:</strong> ${note}`;
+            } else {
+                displayEl.style.display = 'none';
+            }
+        }
+
         function showResult() {
             document.getElementById('section5').classList.remove('active');
             document.getElementById('resultSection').classList.add('active');
@@ -412,28 +1124,15 @@
             steps[5].classList.add('active');
             document.getElementById('progressLine').style.width = '84%';
 
-            const willingness = document.querySelector('input[name="willingness"]:checked');
-            const businessStatus = document.querySelector('input[name="businessStatus"]:checked');
-            const goingConcern = document.querySelector('input[name="goingConcern"]:checked');
-            
-            let recommendRehabilitation = true;
-            if (willingness && willingness.value === '정리희망') recommendRehabilitation = false;
-            if (businessStatus && businessStatus.value === '휴업') recommendRehabilitation = false;
-            if (goingConcern && goingConcern.value === '청산') recommendRehabilitation = false;
-
-            if (recommendRehabilitation) {
-                document.getElementById('rehabilitationResult').style.display = 'block';
-                document.getElementById('bankruptcyResult').style.display = 'none';
-            } else {
-                document.getElementById('rehabilitationResult').style.display = 'none';
-                document.getElementById('bankruptcyResult').style.display = 'block';
-            }
+            generateReport();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function resetForm() {
             document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
             document.querySelectorAll('input[type="checkbox"]').forEach(el => el.checked = false);
+            document.querySelectorAll('textarea').forEach(el => el.value = '');
+            document.querySelectorAll('input[type="text"], input[type="tel"], input[type="email"]').forEach(el => el.value = '');
             document.getElementById('resultSection').classList.remove('active');
             currentSection = 1;
             document.getElementById('section1').classList.add('active');

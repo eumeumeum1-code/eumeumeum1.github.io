@@ -143,6 +143,12 @@
         .quick-label{font-size:11px;color:var(--light);margin-bottom:4px}
         .quick-number{font-size:16px;font-weight:700;color:var(--brown)}
         
+        /* 전송 결과 메시지 */
+        .submit-result{margin-top:20px;padding:16px 20px;border-radius:10px;text-align:center;font-size:14px;font-weight:500}
+        .submit-result.success{background:rgba(107,142,107,.15);border:1px solid var(--success);color:var(--success)}
+        .submit-result.error{background:rgba(166,93,93,.1);border:1px solid var(--danger);color:var(--danger)}
+        .submit-result.loading{background:rgba(184,149,110,.1);border:1px solid var(--gold);color:var(--brown)}
+        
         /* 보고서 스타일 */
         .report-container{background:var(--card);border-radius:18px;overflow:hidden;box-shadow:0 6px 24px rgba(92,74,61,.1);margin-bottom:30px}
         .report-header{background:linear-gradient(135deg,var(--brown),var(--brown-light));padding:30px 35px;color:#fff}
@@ -663,10 +669,13 @@
                     </div>
 
                     <div class="submit-buttons">
-                        <button class="btn btn-submit" onclick="sendEmailReport()">📧 이메일로 상담 요청</button>
+                        <button class="btn btn-submit" onclick="submitToGoogleForms()">📨 상담 요청하기</button>
                         <button class="btn btn-submit-alt" onclick="copyReportToClipboard()">📋 내용 복사하기</button>
                     </div>
-                    <p class="submit-note">* 이메일 버튼 클릭 시 기본 메일 앱이 열립니다.<br>* 복사 버튼으로 카카오톡이나 문자로 전송할 수 있습니다.</p>
+                    <p class="submit-note">* 상담 요청 버튼 클릭 시 입력하신 정보와 진단 결과가 전송됩니다.<br>* 복사 버튼으로 카카오톡이나 문자로 전송할 수도 있습니다.</p>
+                    
+                    <!-- 전송 결과 메시지 -->
+                    <div id="submitResult" class="submit-result" style="display:none;"></div>
                 </div>
             </div>
 
@@ -920,15 +929,12 @@ ${data.rehabilitation.note ? `• 기타사항: ${data.rehabilitation.note}` : '
         }
 
         function copyReportToClipboard() {
-            if (!validateConsultationForm()) return;
-            
             const data = generateReportData();
             const body = generateEmailBody(data);
             
             navigator.clipboard.writeText(body).then(() => {
                 alert('상담 내용이 클립보드에 복사되었습니다.\n이메일이나 카카오톡으로 붙여넣기 하실 수 있습니다.');
             }).catch(err => {
-                // 클립보드 API 실패 시 대체 방법
                 const textArea = document.createElement('textarea');
                 textArea.value = body;
                 document.body.appendChild(textArea);
@@ -937,6 +943,134 @@ ${data.rehabilitation.note ? `• 기타사항: ${data.rehabilitation.note}` : '
                 document.body.removeChild(textArea);
                 alert('상담 내용이 클립보드에 복사되었습니다.\n이메일이나 카카오톡으로 붙여넣기 하실 수 있습니다.');
             });
+        }
+
+        // ============================================
+        // Google Forms 연동 설정
+        // ============================================
+        // 
+        // [설정 방법]
+        // 1. Google Forms (https://forms.google.com) 접속
+        // 2. 새 폼 만들기
+        // 3. 아래 질문들을 순서대로 추가:
+        //    - 성함 (단답형)
+        //    - 연락처 (단답형)
+        //    - 이메일 (단답형)
+        //    - 회사명 (단답형)
+        //    - 직위 (단답형)
+        //    - 상담가능시간 (단답형)
+        //    - 선호연락방법 (단답형)
+        //    - 권장절차 (단답형)
+        //    - 진단상세내용 (장문형)
+        //
+        // 4. 폼 미리보기 열기 → 브라우저 개발자도구(F12) → 
+        //    각 input의 name 속성에서 "entry.숫자" 확인
+        //
+        // 5. 아래 GOOGLE_FORM_ACTION_URL과 ENTRY_IDS를 수정
+        //
+        // 6. 폼 설정 → 응답 → "새 응답에 대한 이메일 알림 받기" 체크
+        // ============================================
+
+        // ★★★ 여기에 실제 Google Form URL을 입력하세요 ★★★
+        // 폼 URL에서 /viewform 을 /formResponse 로 변경
+        // 예: https://docs.google.com/forms/d/e/XXXXX/formResponse
+        const GOOGLE_FORM_ACTION_URL = '';
+
+        // ★★★ 여기에 실제 entry ID를 입력하세요 ★★★
+        // 폼 미리보기에서 F12 → 각 input의 name="entry.숫자" 확인
+        const ENTRY_IDS = {
+            name: '',           // entry.XXXXXXXXXX
+            phone: '',          // entry.XXXXXXXXXX
+            email: '',          // entry.XXXXXXXXXX
+            company: '',        // entry.XXXXXXXXXX
+            position: '',       // entry.XXXXXXXXXX
+            availableTime: '',  // entry.XXXXXXXXXX
+            contactMethod: '',  // entry.XXXXXXXXXX
+            recommendation: '', // entry.XXXXXXXXXX
+            details: ''         // entry.XXXXXXXXXX (진단 상세 내용)
+        };
+
+        function submitToGoogleForms() {
+            if (!validateConsultationForm()) return;
+            
+            const resultDiv = document.getElementById('submitResult');
+            resultDiv.style.display = 'block';
+            
+            // Google Form URL이 설정되지 않은 경우
+            if (!GOOGLE_FORM_ACTION_URL || GOOGLE_FORM_ACTION_URL === '') {
+                resultDiv.className = 'submit-result error';
+                resultDiv.innerHTML = `
+                    ⚠️ <strong>Google Forms 연동이 필요합니다</strong><br><br>
+                    <span style="font-size:12px;color:var(--medium);text-align:left;display:block;">
+                    <strong>[설정 방법]</strong><br>
+                    1. <a href="https://forms.google.com" target="_blank" style="color:var(--brown);">Google Forms</a>에서 새 폼 만들기<br>
+                    2. 질문 추가: 성함, 연락처, 이메일, 회사명, 직위, 상담가능시간, 선호연락방법, 권장절차, 진단상세내용<br>
+                    3. 폼 미리보기 → F12 개발자도구 → 각 input의 entry.숫자 확인<br>
+                    4. HTML 파일의 GOOGLE_FORM_ACTION_URL과 ENTRY_IDS 수정<br>
+                    5. 폼 설정에서 "이메일 알림 받기" 활성화<br><br>
+                    <strong>지금은 "내용 복사하기" 버튼을 사용해 주세요!</strong>
+                    </span>
+                `;
+                return;
+            }
+            
+            resultDiv.className = 'submit-result loading';
+            resultDiv.textContent = '⏳ 상담 요청을 전송 중입니다...';
+            
+            const data = generateReportData();
+            const detailsText = generateEmailBody(data);
+            
+            // iframe을 사용하여 CORS 우회
+            const iframe = document.createElement('iframe');
+            iframe.name = 'hidden_iframe';
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
+            
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = GOOGLE_FORM_ACTION_URL;
+            form.target = 'hidden_iframe';
+            
+            const fields = {
+                [ENTRY_IDS.name]: data.client.name,
+                [ENTRY_IDS.phone]: data.client.phone,
+                [ENTRY_IDS.email]: data.client.email,
+                [ENTRY_IDS.company]: data.client.companyName,
+                [ENTRY_IDS.position]: data.client.position,
+                [ENTRY_IDS.availableTime]: data.client.availableTime,
+                [ENTRY_IDS.contactMethod]: data.client.contactMethod,
+                [ENTRY_IDS.recommendation]: data.recommendation,
+                [ENTRY_IDS.details]: detailsText
+            };
+            
+            for (const [name, value] of Object.entries(fields)) {
+                if (name) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = name;
+                    input.value = value || '-';
+                    form.appendChild(input);
+                }
+            }
+            
+            document.body.appendChild(form);
+            form.submit();
+            
+            // 전송 완료 처리 (iframe이므로 응답 확인 불가, 일정 시간 후 성공으로 처리)
+            setTimeout(() => {
+                resultDiv.className = 'submit-result success';
+                resultDiv.innerHTML = `
+                    ✅ <strong>상담 요청이 전송되었습니다!</strong><br>
+                    <span style="font-size:13px;color:var(--medium);">
+                    담당 변호사가 확인 후 연락드리겠습니다.<br>
+                    빠른 상담을 원하시면 📞 02-1670-7309로 전화주세요.
+                    </span>
+                `;
+                
+                // 정리
+                document.body.removeChild(form);
+                document.body.removeChild(iframe);
+            }, 1500);
         }
 
         function generateReport() {

@@ -971,23 +971,19 @@ ${data.rehabilitation.note ? `• 기타사항: ${data.rehabilitation.note}` : '
         // 6. 폼 설정 → 응답 → "새 응답에 대한 이메일 알림 받기" 체크
         // ============================================
 
-        // ★★★ 여기에 실제 Google Form URL을 입력하세요 ★★★
-        // 폼 URL에서 /viewform 을 /formResponse 로 변경
-        // 예: https://docs.google.com/forms/d/e/XXXXX/formResponse
-        const GOOGLE_FORM_ACTION_URL = '';
+        // ★★★ Google Form 설정 완료 ★★★
+        const GOOGLE_FORM_ACTION_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSe-a0Y_9H3lmLKy5PUAq0JT9FJE-rJY-LPwyCuKLJp5T6lXlg/formResponse';
 
-        // ★★★ 여기에 실제 entry ID를 입력하세요 ★★★
-        // 폼 미리보기에서 F12 → 각 input의 name="entry.숫자" 확인
+        // Entry IDs - 폼 질문 순서:
+        // 1. 법인/대표자
+        // 2. 연락처  
+        // 3. 상담가능시간
+        // 4. 진단내용
         const ENTRY_IDS = {
-            name: '',           // entry.XXXXXXXXXX
-            phone: '',          // entry.XXXXXXXXXX
-            email: '',          // entry.XXXXXXXXXX
-            company: '',        // entry.XXXXXXXXXX
-            position: '',       // entry.XXXXXXXXXX
-            availableTime: '',  // entry.XXXXXXXXXX
-            contactMethod: '',  // entry.XXXXXXXXXX
-            recommendation: '', // entry.XXXXXXXXXX
-            details: ''         // entry.XXXXXXXXXX (진단 상세 내용)
+            name: 'entry.2005620554',           // 법인/대표자
+            phone: 'entry.1045781291',          // 연락처
+            availableTime: 'entry.1065046570',  // 상담가능시간
+            details: 'entry.1651668811'         // 진단내용 (장문형)
         };
 
         function submitToGoogleForms() {
@@ -995,82 +991,34 @@ ${data.rehabilitation.note ? `• 기타사항: ${data.rehabilitation.note}` : '
             
             const resultDiv = document.getElementById('submitResult');
             resultDiv.style.display = 'block';
-            
-            // Google Form URL이 설정되지 않은 경우
-            if (!GOOGLE_FORM_ACTION_URL || GOOGLE_FORM_ACTION_URL === '') {
-                resultDiv.className = 'submit-result error';
-                resultDiv.innerHTML = `
-                    ⚠️ <strong>Google Forms 연동이 필요합니다</strong><br><br>
-                    <span style="font-size:12px;color:var(--medium);text-align:left;display:block;">
-                    <strong>[설정 방법]</strong><br>
-                    1. <a href="https://forms.google.com" target="_blank" style="color:var(--brown);">Google Forms</a>에서 새 폼 만들기<br>
-                    2. 질문 추가: 성함, 연락처, 이메일, 회사명, 직위, 상담가능시간, 선호연락방법, 권장절차, 진단상세내용<br>
-                    3. 폼 미리보기 → F12 개발자도구 → 각 input의 entry.숫자 확인<br>
-                    4. HTML 파일의 GOOGLE_FORM_ACTION_URL과 ENTRY_IDS 수정<br>
-                    5. 폼 설정에서 "이메일 알림 받기" 활성화<br><br>
-                    <strong>지금은 "내용 복사하기" 버튼을 사용해 주세요!</strong>
-                    </span>
-                `;
-                return;
-            }
-            
             resultDiv.className = 'submit-result loading';
-            resultDiv.textContent = '⏳ 상담 요청을 전송 중입니다...';
+            resultDiv.textContent = '⏳ 상담 요청 폼을 준비 중입니다...';
             
             const data = generateReportData();
             const detailsText = generateEmailBody(data);
             
-            // iframe을 사용하여 CORS 우회
-            const iframe = document.createElement('iframe');
-            iframe.name = 'hidden_iframe';
-            iframe.style.display = 'none';
-            document.body.appendChild(iframe);
+            // 법인/대표자 정보 조합
+            const nameInfo = data.client.name + (data.client.companyName !== '-' ? ' / ' + data.client.companyName : '');
             
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = GOOGLE_FORM_ACTION_URL;
-            form.target = 'hidden_iframe';
+            // Google Forms 미리채워진 URL 생성
+            const viewformUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSe-a0Y_9H3lmLKy5PUAq0JT9FJE-rJY-LPwyCuKLJp5T6lXlg/viewform';
+            const prefillUrl = viewformUrl + '?usp=pp_url' +
+                '&entry.2005620554=' + encodeURIComponent(nameInfo) +
+                '&entry.1045781291=' + encodeURIComponent(data.client.phone) +
+                '&entry.1065046570=' + encodeURIComponent(data.client.availableTime) +
+                '&entry.1651668811=' + encodeURIComponent(detailsText);
             
-            const fields = {
-                [ENTRY_IDS.name]: data.client.name,
-                [ENTRY_IDS.phone]: data.client.phone,
-                [ENTRY_IDS.email]: data.client.email,
-                [ENTRY_IDS.company]: data.client.companyName,
-                [ENTRY_IDS.position]: data.client.position,
-                [ENTRY_IDS.availableTime]: data.client.availableTime,
-                [ENTRY_IDS.contactMethod]: data.client.contactMethod,
-                [ENTRY_IDS.recommendation]: data.recommendation,
-                [ENTRY_IDS.details]: detailsText
-            };
+            // 새 창에서 폼 열기
+            window.open(prefillUrl, '_blank');
             
-            for (const [name, value] of Object.entries(fields)) {
-                if (name) {
-                    const input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = name;
-                    input.value = value || '-';
-                    form.appendChild(input);
-                }
-            }
-            
-            document.body.appendChild(form);
-            form.submit();
-            
-            // 전송 완료 처리 (iframe이므로 응답 확인 불가, 일정 시간 후 성공으로 처리)
-            setTimeout(() => {
-                resultDiv.className = 'submit-result success';
-                resultDiv.innerHTML = `
-                    ✅ <strong>상담 요청이 전송되었습니다!</strong><br>
-                    <span style="font-size:13px;color:var(--medium);">
-                    담당 변호사가 확인 후 연락드리겠습니다.<br>
-                    빠른 상담을 원하시면 📞 02-1670-7309로 전화주세요.
-                    </span>
-                `;
-                
-                // 정리
-                document.body.removeChild(form);
-                document.body.removeChild(iframe);
-            }, 1500);
+            resultDiv.className = 'submit-result success';
+            resultDiv.innerHTML = `
+                📝 <strong>새 창에서 상담 요청 폼이 열렸습니다!</strong><br>
+                <span style="font-size:13px;color:var(--medium);">
+                모든 내용이 자동으로 입력되어 있습니다.<br>
+                <strong style="color:var(--brown);">👉 "제출" 버튼만 클릭해주세요!</strong>
+                </span>
+            `;
         }
 
         function generateReport() {

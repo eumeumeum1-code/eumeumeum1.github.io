@@ -990,13 +990,11 @@ ${data.rehabilitation.note ? `• 기타사항: ${data.rehabilitation.note}` : '
         };
 
         // ★★★ 바로 시트로 전송 (새 창 없이) ★★★
-        let formSubmitting = false;
-
         function submitToGoogleSheet() {
             if (!validateConsultationForm()) return;
             
-            const resultDiv = document.getElementById('submitResult');
-            const submitBtn = document.getElementById('submitBtn');
+            var resultDiv = document.getElementById('submitResult');
+            var submitBtn = document.getElementById('submitBtn');
             
             // 버튼 비활성화 및 로딩 상태
             submitBtn.disabled = true;
@@ -1005,61 +1003,61 @@ ${data.rehabilitation.note ? `• 기타사항: ${data.rehabilitation.note}` : '
             resultDiv.className = 'submit-result loading';
             resultDiv.textContent = '상담 요청을 전송하고 있습니다...';
             
-            const data = generateReportData();
-            const detailsText = generateEmailBody(data);
-            const nameInfo = data.client.name + (data.client.companyName !== '-' ? ' / ' + data.client.companyName : '');
-            
-            formSubmitting = true;
+            var data = generateReportData();
+            var detailsText = generateEmailBody(data);
+            var nameInfo = data.client.name + (data.client.companyName !== '-' ? ' / ' + data.client.companyName : '');
             
             // 동적 form 생성하여 숨겨진 iframe으로 제출
-            const form = document.createElement('form');
+            var form = document.createElement('form');
             form.method = 'POST';
             form.action = GOOGLE_FORM_ACTION_URL;
             form.target = 'hidden_iframe';
             
-            const fields = {};
-            fields[ENTRY_IDS.name] = nameInfo;
-            fields[ENTRY_IDS.phone] = data.client.phone;
-            fields[ENTRY_IDS.availableTime] = data.client.availableTime;
-            fields[ENTRY_IDS.details] = detailsText;
+            // 필드 추가
+            var field1 = document.createElement('input');
+            field1.type = 'hidden';
+            field1.name = ENTRY_IDS.name;
+            field1.value = nameInfo;
+            form.appendChild(field1);
             
-            for (const name in fields) {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = name;
-                input.value = fields[name];
-                form.appendChild(input);
-            }
+            var field2 = document.createElement('input');
+            field2.type = 'hidden';
+            field2.name = ENTRY_IDS.phone;
+            field2.value = data.client.phone;
+            form.appendChild(field2);
+            
+            var field3 = document.createElement('input');
+            field3.type = 'hidden';
+            field3.name = ENTRY_IDS.availableTime;
+            field3.value = data.client.availableTime;
+            form.appendChild(field3);
+            
+            var field4 = document.createElement('input');
+            field4.type = 'hidden';
+            field4.name = ENTRY_IDS.details;
+            field4.value = detailsText;
+            form.appendChild(field4);
             
             document.body.appendChild(form);
             form.submit();
             document.body.removeChild(form);
             
-            // 2초 후 성공 처리 (iframe은 응답을 직접 확인할 수 없으므로)
-            setTimeout(function() {
-                if (formSubmitting) {
-                    showSubmitSuccess(resultDiv, submitBtn);
-                    formSubmitting = false;
-                }
-            }, 2000);
+            // 1.5초 후 성공 처리
+            window.setTimeout(function() {
+                resultDiv.className = 'submit-result success';
+                resultDiv.innerHTML = '✅ <strong>상담 요청이 성공적으로 접수되었습니다!</strong><br><span style="font-size:13px;color:var(--medium);">빠른 시일 내에 담당 변호사가 연락드리겠습니다.<br>급한 문의는 <strong style="color:var(--brown);">📞 1670-7309</strong>로 연락해 주세요.</span>';
+                submitBtn.innerHTML = '✅ 전송 완료';
+                
+                // 5초 후 버튼 복원
+                window.setTimeout(function() {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '📨 상담 요청하기';
+                }, 5000);
+            }, 1500);
         }
 
         function onFormSubmitted() {
-            if (formSubmitting) {
-                formSubmitting = false;
-            }
-        }
-
-        function showSubmitSuccess(resultDiv, submitBtn) {
-            resultDiv.className = 'submit-result success';
-            resultDiv.innerHTML = '✅ <strong>상담 요청이 성공적으로 접수되었습니다!</strong><br><span style="font-size:13px;color:var(--medium);">빠른 시일 내에 담당 변호사가 연락드리겠습니다.<br>급한 문의는 <strong style="color:var(--brown);">📞 1670-7309</strong>로 연락해 주세요.</span>';
-            submitBtn.innerHTML = '✅ 전송 완료';
-            
-            // 5초 후 버튼 복원
-            setTimeout(function() {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '📨 상담 요청하기';
-            }, 5000);
+            // iframe 로드 완료 시 (백업용)
         }
 
         function generateReport() {

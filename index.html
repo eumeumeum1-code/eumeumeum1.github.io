@@ -669,10 +669,10 @@
                     </div>
 
                     <div class="submit-buttons">
-                        <button class="btn btn-submit" onclick="submitToGoogleForms()">📨 상담 요청하기</button>
+                        <button class="btn btn-submit" id="submitBtn" onclick="submitToGoogleSheet()">📨 상담 요청하기</button>
                         <button class="btn btn-submit-alt" onclick="copyReportToClipboard()">📋 내용 복사하기</button>
                     </div>
-                    <p class="submit-note">* 상담 요청 버튼 클릭 시 입력하신 정보와 진단 결과가 전송됩니다.<br>* 복사 버튼으로 카카오톡이나 문자로 전송할 수도 있습니다.</p>
+                    <p class="submit-note">* 상담 요청 버튼 클릭 시 입력하신 정보와 진단 결과가 바로 전송됩니다.<br>* 복사 버튼으로 카카오톡이나 문자로 전송할 수도 있습니다.</p>
                     
                     <!-- 전송 결과 메시지 -->
                     <div id="submitResult" class="submit-result" style="display:none;"></div>
@@ -685,6 +685,9 @@
             </div>
         </div>
     </main>
+
+    <!-- 숨겨진 iframe (Google Form 직접 제출용) -->
+    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="onFormSubmitted()"></iframe>
 
     <footer class="footer">
         <p>법무법인 JLP | 서울특별시 서초구</p>
@@ -986,39 +989,77 @@ ${data.rehabilitation.note ? `• 기타사항: ${data.rehabilitation.note}` : '
             details: 'entry.1651668811'         // 진단내용 (장문형)
         };
 
-        function submitToGoogleForms() {
+        // ★★★ 바로 시트로 전송 (새 창 없이) ★★★
+        let formSubmitting = false;
+
+        function submitToGoogleSheet() {
             if (!validateConsultationForm()) return;
             
             const resultDiv = document.getElementById('submitResult');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // 버튼 비활성화 및 로딩 상태
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '⏳ 전송 중...';
             resultDiv.style.display = 'block';
             resultDiv.className = 'submit-result loading';
-            resultDiv.textContent = '⏳ 상담 요청 폼을 준비 중입니다...';
+            resultDiv.textContent = '상담 요청을 전송하고 있습니다...';
             
             const data = generateReportData();
             const detailsText = generateEmailBody(data);
-            
-            // 법인/대표자 정보 조합
             const nameInfo = data.client.name + (data.client.companyName !== '-' ? ' / ' + data.client.companyName : '');
             
-            // Google Forms 미리채워진 URL 생성
-            const viewformUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSe-a0Y_9H3lmLKy5PUAq0JT9FJE-rJY-LPwyCuKLJp5T6lXlg/viewform';
-            const prefillUrl = viewformUrl + '?usp=pp_url' +
-                '&entry.2005620554=' + encodeURIComponent(nameInfo) +
-                '&entry.1045781291=' + encodeURIComponent(data.client.phone) +
-                '&entry.1065046570=' + encodeURIComponent(data.client.availableTime) +
-                '&entry.1651668811=' + encodeURIComponent(detailsText);
+            formSubmitting = true;
             
-            // 새 창에서 폼 열기
-            window.open(prefillUrl, '_blank');
+            // 동적 form 생성하여 숨겨진 iframe으로 제출
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = GOOGLE_FORM_ACTION_URL;
+            form.target = 'hidden_iframe';
             
+            const fields = {};
+            fields[ENTRY_IDS.name] = nameInfo;
+            fields[ENTRY_IDS.phone] = data.client.phone;
+            fields[ENTRY_IDS.availableTime] = data.client.availableTime;
+            fields[ENTRY_IDS.details] = detailsText;
+            
+            for (const name in fields) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = name;
+                input.value = fields[name];
+                form.appendChild(input);
+            }
+            
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
+            
+            // 2초 후 성공 처리 (iframe은 응답을 직접 확인할 수 없으므로)
+            setTimeout(function() {
+                if (formSubmitting) {
+                    showSubmitSuccess(resultDiv, submitBtn);
+                    formSubmitting = false;
+                }
+            }, 2000);
+        }
+
+        function onFormSubmitted() {
+            if (formSubmitting) {
+                formSubmitting = false;
+            }
+        }
+
+        function showSubmitSuccess(resultDiv, submitBtn) {
             resultDiv.className = 'submit-result success';
-            resultDiv.innerHTML = `
-                📝 <strong>새 창에서 상담 요청 폼이 열렸습니다!</strong><br>
-                <span style="font-size:13px;color:var(--medium);">
-                모든 내용이 자동으로 입력되어 있습니다.<br>
-                <strong style="color:var(--brown);">👉 "제출" 버튼만 클릭해주세요!</strong>
-                </span>
-            `;
+            resultDiv.innerHTML = '✅ <strong>상담 요청이 성공적으로 접수되었습니다!</strong><br><span style="font-size:13px;color:var(--medium);">빠른 시일 내에 담당 변호사가 연락드리겠습니다.<br>급한 문의는 <strong style="color:var(--brown);">📞 1670-7309</strong>로 연락해 주세요.</span>';
+            submitBtn.innerHTML = '✅ 전송 완료';
+            
+            // 5초 후 버튼 복원
+            setTimeout(function() {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '📨 상담 요청하기';
+            }, 5000);
         }
 
         function generateReport() {
@@ -1216,6 +1257,10 @@ ${data.rehabilitation.note ? `• 기타사항: ${data.rehabilitation.note}` : '
             document.querySelectorAll('textarea').forEach(el => el.value = '');
             document.querySelectorAll('input[type="text"], input[type="tel"], input[type="email"]').forEach(el => el.value = '');
             document.getElementById('resultSection').classList.remove('active');
+            // 전송 상태 초기화
+            document.getElementById('submitResult').style.display = 'none';
+            document.getElementById('submitBtn').disabled = false;
+            document.getElementById('submitBtn').innerHTML = '📨 상담 요청하기';
             currentSection = 1;
             document.getElementById('section1').classList.add('active');
             updateProgress();

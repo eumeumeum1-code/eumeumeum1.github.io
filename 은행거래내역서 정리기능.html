@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>법무법인 제이엘피 — 개인회생 거래내역 분석</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1A2B4A;
+    --navy2: #243760;
+    --gold: #C9A84C;
+    --pale: #F7F6F3;
+    --pale2: #EDEBE5;
+    --white: #FFFFFF;
+    --red: #C62828;
+    --green: #2E7D32;
+    --blue: #1565C0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans KR', sans-serif; background: var(--pale); color: var(--navy); display: flex; min-height: 100vh; }
+
+  /* ── Sidebar ── */
+  #sidebar {
+    width: 190px; flex-shrink: 0; background: var(--white);
+    border-right: 1px solid var(--pale2); display: flex; flex-direction: column;
+    position: fixed; top: 0; left: 0; height: 100vh; overflow-y: auto; z-index: 100;
+  }
+  .logo-wrap { padding: 16px 14px; border-bottom: 1px solid var(--pale2); display: flex; align-items: center; gap: 10px; }
+  .logo-mark { width: 32px; height: 32px; background: var(--navy); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: var(--gold); font-weight: 700; font-size: 11px; flex-shrink: 0; }
+  .logo-text { font-size: 13px; font-weight: 700; color: var(--navy); line-height: 1.2; }
+  .logo-sub { font-size: 9px; color: var(--gold); letter-spacing: 0.06em; }
+  .nav-section { padding: 12px 14px 4px; font-size: 10px; color: #AAA; font-weight: 600; letter-spacing: 0.06em; }
+  .nav-btn { width: 100%; display: flex; align-items: center; gap: 8px; padding: 9px 14px; border: none; background: transparent; border-left: 3px solid transparent; cursor: pointer; font-size: 13px; color: #666; text-align: left; font-family: inherit; transition: all 0.12s; }
+  .nav-btn:hover { background: #F5F5F5; }
+  .nav-btn.active { background: rgba(26,43,74,0.06); border-left-color: var(--gold); color: var(--navy); font-weight: 600; }
+  .sidebar-footer { margin-top: auto; padding: 14px; border-top: 1px solid var(--pale2); font-size: 10px; color: #AAA; line-height: 1.9; }
+  .sidebar-footer span { color: var(--gold); font-weight: 600; display: block; }
+
+  /* ── Main ── */
+  #main { margin-left: 190px; flex: 1; padding: 24px; max-width: calc(100% - 190px); }
+  .page { display: none; max-width: 880px; margin: 0 auto; }
+  .page.active { display: block; }
+
+  /* ── Typography ── */
+  .page-title { font-size: 20px; font-weight: 700; color: var(--navy); display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .version-badge { background: var(--navy); color: #fff; font-size: 11px; padding: 2px 9px; border-radius: 20px; font-weight: 400; }
+  .section-card { background: var(--white); border: 1px solid var(--pale2); border-radius: 10px; padding: 18px; margin-bottom: 14px; }
+  .section-title { font-size: 14px; font-weight: 600; color: var(--navy); padding-bottom: 10px; border-bottom: 2px solid var(--gold); display: inline-block; margin-bottom: 14px; }
+
+  /* ── Notices ── */
+  .notice { border-radius: 8px; padding: 10px 14px; margin-bottom: 10px; font-size: 12px; line-height: 1.9; }
+  .notice.yellow { background: #FFF8E1; border: 1px solid #FFD54F; color: #5D4037; }
+  .notice.blue { background: #E3F2FD; border: 1px solid #90CAF9; color: #1565C0; }
+
+  /* ── Dropzone ── */
+  #dropzone { border: 2px dashed var(--pale2); border-radius: 10px; padding: 40px 20px; text-align: center; cursor: pointer; background: var(--pale); transition: all 0.2s; }
+  #dropzone:hover, #dropzone.drag { border-color: var(--gold); background: rgba(201,168,76,0.05); }
+  #dropzone .dz-icon { font-size: 28px; margin-bottom: 8px; }
+  #dropzone .dz-main { font-weight: 600; font-size: 15px; color: var(--navy); margin-bottom: 4px; }
+  #dropzone .dz-sub { font-size: 12px; color: #888; }
+  #file-input { display: none; }
+
+  /* ── File List ── */
+  #file-list { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+  .file-item { display: flex; align-items: center; justify-content: space-between; background: var(--pale); border: 1px solid var(--pale2); border-radius: 6px; padding: 8px 12px; font-size: 13px; }
+  .file-item .fn { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+  .file-item .fn span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .file-item .fsize { color: #AAA; font-size: 11px; flex-shrink: 0; margin-left: 6px; }
+  .file-remove { background: none; border: none; cursor: pointer; color: #AAA; font-size: 18px; padding: 0 4px; line-height: 1; }
+
+  /* ── Inputs ── */
+  input[type=text], input[type=number] { padding: 10px 12px; border: 1px solid var(--pale2); border-radius: 7px; font-size: 14px; color: var(--navy); background: var(--white); font-family: inherit; outline: none; transition: border 0.15s; }
+  input[type=text]:focus, input[type=number]:focus { border-color: var(--navy); }
+  input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+  /* ── Threshold Buttons ── */
+  .thresh-group { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .thresh-btn { padding: 8px 18px; border: 1px solid var(--pale2); border-radius: 6px; background: var(--white); color: var(--navy); cursor: pointer; font-size: 14px; font-family: inherit; transition: all 0.15s; }
+  .thresh-btn.active { background: var(--navy); color: #fff; border-color: var(--navy); font-weight: 600; }
+  #custom-thresh { width: 100px; }
+  #thresh-hint { font-size: 12px; color: var(--gold); margin-top: 6px; }
+
+  /* ── Option Cards ── */
+  .opt-card { border: 1px solid var(--pale2); border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; transition: all 0.15s; cursor: pointer; }
+  .opt-card.checked { border-color: var(--navy); background: rgba(26,43,74,0.03); }
+  .opt-header { display: flex; align-items: center; gap: 12px; }
+  .opt-check { width: 20px; height: 20px; border: 2px solid var(--pale2); border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s; background: transparent; }
+  .opt-check.checked { background: var(--navy); border-color: var(--navy); }
+  .opt-check.checked::after { content: '✓'; color: #fff; font-size: 12px; }
+  .opt-icon { font-size: 18px; }
+  .opt-title { font-weight: 600; font-size: 14px; color: var(--navy); }
+  .opt-sub { font-size: 12px; color: #888; }
+  .opt-body { margin-top: 10px; display: none; }
+  .opt-body.show { display: block; }
+
+  /* ── Submit Button ── */
+  #btn-analyze { width: 100%; padding: 14px; border-radius: 8px; border: none; background: var(--navy); color: #fff; font-size: 15px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: inherit; transition: opacity 0.15s; margin-top: 4px; }
+  #btn-analyze:disabled { background: #CCC; cursor: not-allowed; }
+
+  /* ── Spinner ── */
+  .spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top: 2px solid #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Error ── */
+  #error-box { background: #FFEBEE; border: 1px solid #EF9A9A; border-radius: 8px; padding: 12px 16px; color: var(--red); font-size: 13px; margin-top: 12px; white-space: pre-wrap; display: none; }
+
+  /* ── Results ── */
+  #results { margin-top: 28px; animation: fadeUp 0.3s ease; display: none; }
+  @keyframes fadeUp { from { opacity:0;transform:translateY(10px);} to { opacity:1;transform:translateY(0);} }
+  .results-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .results-header h2 { font-size: 17px; font-weight: 700; color: var(--navy); }
+  .results-meta { font-size: 12px; color: #888; }
+
+  /* ── Summary Grid ── */
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 18px; }
+  .summary-card { background: var(--white); border: 1px solid var(--pale2); border-radius: 8px; padding: 12px; border-left-width: 4px; border-left-style: solid; }
+  .summary-label { font-size: 11px; color: #888; margin-bottom: 4px; }
+  .summary-val { font-size: 16px; font-weight: 700; }
+
+  /* ── Opinion ── */
+  .opinion-box { background: var(--white); border: 1px solid var(--pale2); border-left: 4px solid var(--gold); border-radius: 8px; padding: 14px; margin-bottom: 16px; }
+  .opinion-title { font-weight: 600; font-size: 13px; color: var(--navy); margin-bottom: 8px; }
+  .opinion-text { font-size: 13px; line-height: 1.9; white-space: pre-wrap; color: #333; }
+  .caution-text { margin-top: 10px; padding: 8px 12px; background: #FFF8E1; border-radius: 6px; font-size: 12px; color: #8D6E63; }
+
+  /* ── High Value ── */
+  .highval-box { background: #FFF3E0; border: 1px solid #FFCC80; border-radius: 8px; padding: 14px; margin-bottom: 16px; }
+  .highval-title { font-weight: 600; font-size: 13px; color: #E65100; margin-bottom: 8px; }
+  .highval-row { display: flex; gap: 12px; font-size: 13px; padding: 5px 0; border-bottom: 1px solid #FFE0B2; }
+  .highval-row:last-child { border-bottom: none; }
+
+  /* ── Table ── */
+  .table-wrap { background: var(--white); border: 1px solid var(--pale2); border-radius: 8px; overflow: hidden; margin-bottom: 16px; }
+  .table-header { padding: 12px 16px; border-bottom: 1px solid var(--pale2); font-weight: 600; font-size: 14px; color: var(--navy); }
+  .table-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead tr { background: var(--navy); }
+  thead th { padding: 10px 12px; color: #fff; font-weight: 500; text-align: left; font-size: 12px; white-space: nowrap; }
+  tbody tr:nth-child(even) { background: var(--pale); }
+  tbody td { padding: 8px 12px; border-bottom: 1px solid var(--pale2); vertical-align: middle; }
+  .amount-out { color: var(--red); font-weight: 600; white-space: nowrap; }
+  .amount-in { color: var(--green); font-weight: 600; white-space: nowrap; }
+
+  /* ── Category Badges ── */
+  .cat { display: inline-block; border-radius: 4px; padding: 2px 8px; font-size: 11px; font-weight: 600; white-space: nowrap; border-width: 1px; border-style: solid; }
+  .cat-생활비 { background:#E8F5E9;color:#1B5E20;border-color:#A5D6A7; }
+  .cat-사치성 { background:#FFEBEE;color:#B71C1C;border-color:#EF9A9A; }
+  .cat-채무 { background:#E3F2FD;color:#0D47A1;border-color:#90CAF9; }
+  .cat-급여 { background:#F3E5F5;color:#4A148C;border-color:#CE93D8; }
+  .cat-저축 { background:#FFF8E1;color:#E65100;border-color:#FFD54F; }
+  .cat-증권 { background:#E0F7FA;color:#006064;border-color:#80DEEA; }
+  .cat-특정인 { background:#FCE4EC;color:#880E4F;border-color:#F48FB1; }
+  .cat-기타 { background:#F5F5F5;color:#424242;border-color:#BDBDBD; }
+
+  /* ── Download Button ── */
+  .btn-gold { padding: 10px 20px; border: 1px solid var(--gold); background: var(--gold); color: var(--navy); border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer; font-family: inherit; }
+  .btn-gold:hover { opacity: 0.9; }
+
+  /* ── Footer note ── */
+  .result-footer { text-align: center; font-size: 12px; color: #AAA; line-height: 1.9; margin-top: 14px; }
+  .result-footer strong { color: var(--gold); }
+
+  /* ── PDF Tools ── */
+  .tool-page { max-width: 680px; margin: 0 auto; }
+  .tool-desc { font-size: 14px; color: #666; margin-bottom: 24px; }
+  .tool-dropzone { border: 2px dashed var(--pale2); border-radius: 10px; padding: 40px; text-align: center; cursor: pointer; background: var(--pale); transition: all 0.2s; margin-bottom: 14px; }
+  .tool-dropzone:hover { border-color: var(--gold); }
+  .tool-success { background: #E8F5E9; border: 1px solid #A5D6A7; border-radius: 8px; padding: 20px; text-align: center; display: none; }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    #sidebar { width: 100%; height: auto; position: relative; flex-direction: row; flex-wrap: wrap; }
+    #main { margin-left: 0; padding: 16px; max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════════ SIDEBAR ════════════════ -->
+<aside id="sidebar">
+  <div class="logo-wrap">
+    <div class="logo-mark">JLP</div>
+    <div>
+      <div class="logo-text">법무법인 제이엘피</div>
+      <div class="logo-sub">JLP PARTNERS</div>
+    </div>
+  </div>
+
+  <nav>
+    <button class="nav-btn active" data-page="analyze">📊 거래내역 분석</button>
+    <div class="nav-section">도구모음</div>
+    <button class="nav-btn" data-page="rotate">🔄 분석 회전</button>
+    <button class="nav-btn" data-page="merge">🔗 PDF 병합</button>
+    <button class="nav-btn" data-page="split">✂️ PDF 분할</button>
+    <button class="nav-btn" data-page="delete">🗑️ 페이지 삭제</button>
+    <button class="nav-btn" data-page="pdf2img">🖼️ PDF → 이미지</button>
+    <button class="nav-btn" data-page="img2pdf">📄 이미지 → PDF</button>
+  </nav>
+
+  <div class="sidebar-footer">
+    <span>📞 1670-7309</span>
+    jlpartners.kr
+  </div>
+</aside>
+
+<!-- ════════════════ MAIN ════════════════ -->
+<main id="main">
+
+  <!-- ── 거래내역 분석 ── -->
+  <div class="page active" id="page-analyze">
+    <div class="page-title">
+      거래내역서 분석
+      <span class="version-badge">v2.0</span>
+    </div>
+
+    <div class="notice yellow">
+      ⚠️ <strong>안내사항</strong> — 회전된 PDF는 먼저 <strong>분석 회전</strong> 도구로 처리 후 분석해 주세요.<br>
+      비밀번호로 잠긴 PDF는 비밀번호 해제 후 업로드해 주세요.<br>
+      여러 은행 거래내역이 합쳐져 있으면 <strong>은행별로 파일을 나눠서</strong> 올려주세요.
+    </div>
+    <div class="notice blue">🌐 Chrome 브라우저 권장 — Chrome에 최적화되어 있습니다.</div>
+
+    <!-- File Upload -->
+    <div class="section-card">
+      <div class="section-title">거래내역서 파일</div>
+      <div id="dropzone">
+        <div class="dz-icon">⬆️</div>
+        <p class="dz-main">PDF / 이미지 파일을 드래그하거나 클릭해서 선택</p>
+        <p class="dz-sub">여러 파일 동시 업로드 가능 · PDF, PNG, JPG, WEBP 지원</p>
+      </div>
+      <input type="file" id="file-input" multiple accept=".pdf,.png,.jpg,.jpeg,.webp">
+      <div id="file-list"></div>
+    </div>
+
+    <!-- Client Name -->
+    <div class="section-card">
+      <div class="section-title">의뢰인 이름</div>
+      <input type="text" id="client-name" placeholder="입력 시 파일명으로 저장" style="width:280px">
+    </div>
+
+    <!-- Threshold -->
+    <div class="section-card">
+      <div class="section-title">기준금액 (엑셀 시트 1 필터)</div>
+      <div class="thresh-group">
+        <button class="thresh-btn" data-val="30">30만원</button>
+        <button class="thresh-btn" data-val="50">50만원</button>
+        <button class="thresh-btn" data-val="100">100만원</button>
+        <input type="number" id="custom-thresh" placeholder="직접 입력">
+        <span style="font-size:13px;color:#888">만원</span>
+      </div>
+      <div id="thresh-hint"></div>
+    </div>
+
+    <!-- Options -->
+    <div class="section-card">
+      <div class="section-title">추가 분석 옵션</div>
+
+      <div class="opt-card" id="opt-person-card">
+        <div class="opt-header">
+          <div class="opt-check" id="opt-person-check"></div>
+          <span class="opt-icon">👤</span>
+          <div>
+            <div class="opt-title">특정인과의 거래 내역 추출</div>
+            <div class="opt-sub">특정인과의 거래 내역도 추출해 드립니다</div>
+          </div>
+        </div>
+        <div class="opt-body" id="opt-person-body">
+          <input type="text" id="person-name" placeholder="이름 또는 계좌번호 (예: 홍길동)" style="width:100%;margin-top:8px">
+        </div>
+      </div>
+
+      <div class="opt-card" id="opt-debt-card">
+        <div class="opt-header">
+          <div class="opt-check" id="opt-debt-check"></div>
+          <span class="opt-icon">🏦</span>
+          <div>
+            <div class="opt-title">대출금 사용처 소명표 작성</div>
+            <div class="opt-sub">부채증명서를 업로드하면 대출금 사용처를 자동 분석합니다</div>
+          </div>
+        </div>
+        <div class="opt-body" id="opt-debt-body">
+          <div class="tool-dropzone" id="debt-dropzone" style="padding:16px">
+            📎 부채증명서 파일 업로드 (선택사항)
+          </div>
+          <input type="file" id="debt-file" accept=".pdf,.png,.jpg,.jpeg" style="display:none">
+          <div id="debt-filename" style="font-size:12px;color:var(--green);margin-top:4px"></div>
+        </div>
+      </div>
+
+      <div class="opt-card" id="opt-sec-card">
+        <div class="opt-header">
+          <div class="opt-check" id="opt-sec-check"></div>
+          <span class="opt-icon">📈</span>
+          <div>
+            <div class="opt-title">증권/코인 계좌 입출금 분석</div>
+            <div class="opt-sub">증권/코인 거래내역을 분석하여 은행 이체와 자동 매칭합니다</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="error-box"></div>
+    <button id="btn-analyze" disabled>▷ 분석 시작</button>
+
+    <!-- Results -->
+    <div id="results">
+      <div class="results-header">
+        <h2>📊 분석 결과</h2>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="results-meta" id="result-period"></span>
+          <button class="btn-gold" id="btn-download">📄 보고서 다운로드</button>
+        </div>
+      </div>
+      <div class="summary-grid" id="summary-grid"></div>
+      <div id="highval-section"></div>
+      <div id="loan-section"></div>
+      <div class="opinion-box" id="opinion-box" style="display:none">
+        <div class="opinion-title">⚖️ 담당 변호사 검토 의견 (AI 초안)</div>
+        <div class="opinion-text" id="opinion-text"></div>
+        <div class="caution-text" id="caution-text" style="display:none"></div>
+      </div>
+      <div class="table-wrap">
+        <div class="table-header">거래 항목별 분류 <span id="tx-count" style="font-weight:400;color:#888;font-size:13px"></span></div>
+        <div class="table-scroll">
+          <table>
+            <thead><tr>
+              <th>날짜</th><th>거래내용</th><th>금액</th><th>잔액</th><th>분류</th><th>분류 근거</th>
+            </tr></thead>
+            <tbody id="tx-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="result-footer">
+        본 분석은 AI 초안입니다. 법원 제출 전 담당 변호사의 최종 검토가 필요합니다.<br>
+        <strong>법무법인 제이엘피 상담전화: 1670-7309</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PDF Tools ── -->
+  <div class="page" id="page-rotate"><div class="page-title">🔄 분석 회전</div><div class="tool-desc">회전된 PDF를 올바른 방향으로 회전시킨 뒤 분석합니다.</div><div id="tool-upload-rotate"></div></div>
+  <div class="page" id="page-merge"><div class="page-title">🔗 PDF 병합</div><div class="tool-desc">여러 PDF 파일을 하나로 합칩니다.</div><div id="tool-upload-merge"></div></div>
+  <div class="page" id="page-split"><div class="page-title">✂️ PDF 분할</div><div class="tool-desc">PDF를 페이지별로 분리합니다.</div><div id="tool-upload-split"></div></div>
+  <div class="page" id="page-delete"><div class="page-title">🗑️ 페이지 삭제</div><div class="tool-desc">PDF에서 특정 페이지를 삭제합니다.</div><div id="tool-upload-delete"></div></div>
+  <div class="page" id="page-pdf2img"><div class="page-title">🖼️ PDF → 이미지</div><div class="tool-desc">PDF 각 페이지를 이미지 파일로 변환합니다.</div><div id="tool-upload-pdf2img"></div></div>
+  <div class="page" id="page-img2pdf"><div class="page-title">📄 이미지 → PDF</div><div class="tool-desc">이미지 파일들을 하나의 PDF로 합칩니다.</div><div id="tool-upload-img2pdf"></div></div>
+
+</main>
+
+<script>
+// ════════ State ════════
+const state = {
+  files: [],
+  threshold: null,
+  opts: { person: false, debt: false, sec: false },
+  result: null,
+};
+
+// ════════ Navigation ════════
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    const pageId = 'page-' + btn.dataset.page;
+    const page = document.getElementById(pageId);
+    if (page) page.classList.add('active');
+    initToolPage(btn.dataset.page);
+  });
+});
+
+// ════════ Tool Pages (stub) ════════
+function initToolPage(id) {
+  const containerId = 'tool-upload-' + id;
+  const el = document.getElementById(containerId);
+  if (!el || el.innerHTML) return;
+  el.innerHTML = `
+    <div class="section-card">
+      <div class="tool-dropzone" onclick="this.nextElementSibling.click()" style="cursor:pointer">
+        <div style="font-size:28px;margin-bottom:8px">📁</div>
+        <p style="font-weight:600;color:var(--navy);margin-bottom:4px">파일을 드래그하거나 클릭하여 업로드</p>
+        <p style="font-size:12px;color:#888">PDF / 이미지 지원</p>
+      </div>
+      <input type="file" multiple style="display:none" onchange="showToolResult('${id}', this)">
+      <div id="tool-result-${id}" class="tool-success">
+        <div style="font-size:24px;margin-bottom:8px">✅</div>
+        <p style="font-weight:600;color:var(--green);margin-bottom:4px">처리 완료</p>
+        <p style="font-size:12px;color:#666;margin-bottom:12px">처리된 파일을 다운로드하세요</p>
+        <button class="btn-gold">📥 다운로드</button>
+      </div>
+    </div>
+  `;
+}
+function showToolResult(id, input) {
+  if (input.files.length) {
+    setTimeout(() => {
+      const r = document.getElementById('tool-result-' + id);
+      if (r) r.style.display = 'block';
+    }, 800);
+  }
+}
+
+// ════════ File Upload ════════
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('file-input');
+
+dropzone.addEventListener('click', () => fileInput.click());
+dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('drag'); });
+dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag'));
+dropzone.addEventListener('drop', e => {
+  e.preventDefault(); dropzone.classList.remove('drag');
+  addFiles(Array.from(e.dataTransfer.files));
+});
+fileInput.addEventListener('change', () => addFiles(Array.from(fileInput.files)));
+
+function addFiles(newFiles) {
+  state.files = [...state.files, ...newFiles];
+  renderFileList();
+  updateBtn();
+}
+
+function renderFileList() {
+  const list = document.getElementById('file-list');
+  list.innerHTML = state.files.map((f, i) => `
+    <div class="file-item">
+      <div class="fn">
+        <span>${f.type.includes('pdf') ? '📕' : '🖼️'}</span>
+        <span>${f.name}</span>
+        <span class="fsize">${(f.size / 1024).toFixed(0)} KB</span>
+      </div>
+      <button class="file-remove" onclick="removeFile(${i})">×</button>
+    </div>
+  `).join('');
+}
+
+function removeFile(i) {
+  state.files.splice(i, 1);
+  renderFileList();
+  updateBtn();
+}
+
+function updateBtn() {
+  document.getElementById('btn-analyze').disabled = state.files.length === 0;
+}
+
+// ════════ Threshold ════════
+let selectedThresh = null;
+document.querySelectorAll('.thresh-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.thresh-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedThresh = parseInt(btn.dataset.val);
+    document.getElementById('custom-thresh').value = '';
+    updateThreshHint();
+  });
+});
+document.getElementById('custom-thresh').addEventListener('input', e => {
+  document.querySelectorAll('.thresh-btn').forEach(b => b.classList.remove('active'));
+  selectedThresh = parseInt(e.target.value) || null;
+  updateThreshHint();
+});
+function updateThreshHint() {
+  const h = document.getElementById('thresh-hint');
+  h.textContent = selectedThresh ? `✓ ${(selectedThresh * 10000).toLocaleString()}원 이상 거래를 별도 정리합니다` : '';
+}
+
+// ════════ Options ════════
+function setupOpt(id) {
+  const card = document.getElementById('opt-' + id + '-card');
+  const check = document.getElementById('opt-' + id + '-check');
+  const body = document.getElementById('opt-' + id + '-body');
+  card.addEventListener('click', () => {
+    state.opts[id] = !state.opts[id];
+    check.classList.toggle('checked', state.opts[id]);
+    card.classList.toggle('checked', state.opts[id]);
+    if (body) body.classList.toggle('show', state.opts[id]);
+  });
+}
+['person','debt','sec'].forEach(setupOpt);
+
+document.getElementById('debt-dropzone').addEventListener('click', e => {
+  e.stopPropagation();
+  document.getElementById('debt-file').click();
+});
+document.getElementById('debt-file').addEventListener('change', e => {
+  const f = e.target.files[0];
+  document.getElementById('debt-filename').textContent = f ? '✓ ' + f.name + ' 업로드됨' : '';
+});
+
+// ════════ Analyze ════════
+document.getElementById('btn-analyze').addEventListener('click', analyze);
+
+async function fileToBase64(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => res(r.result.split(',')[1]);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+}
+
+function getMediaType(file) {
+  const m = { 'application/pdf':'application/pdf','image/png':'image/png','image/jpeg':'image/jpeg','image/webp':'image/webp','image/gif':'image/gif' };
+  return m[file.type] || 'image/jpeg';
+}
+
+async function analyze() {
+  const btn = document.getElementById('btn-analyze');
+  const errBox = document.getElementById('error-box');
+  errBox.style.display = 'none';
+  document.getElementById('results').style.display = 'none';
+
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> AI 분석 중...';
+
+  try {
+    const contentParts = [];
+    for (const f of state.files.slice(0, 5)) {
+      const b64 = await fileToBase64(f);
+      const mt = getMediaType(f);
+      if (mt === 'application/pdf') {
+        contentParts.push({ type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: b64 } });
+      } else {
+        contentParts.push({ type: 'image', source: { type: 'base64', media_type: mt, data: b64 } });
+      }
+    }
+
+    const clientName = document.getElementById('client-name').value || '미입력';
+    const personName = document.getElementById('person-name').value;
+    const threshKRW = selectedThresh ? selectedThresh * 10000 : 0;
+
+    let extras = '';
+    if (state.opts.person && personName) extras += `\n- 특정인(${personName})과의 거래를 "특정인 이체" 카테고리로 별도 추출하세요.`;
+    if (state.opts.debt) extras += `\n- 대출금 사용처 소명표를 별도로 작성하세요. summary.loan_usage에 {date,amount,usage} 배열로 넣으세요.`;
+    if (state.opts.sec) extras += `\n- 증권/코인 거래를 "증권/코인" 카테고리로 분류하고 summary.sec_coin 총액을 계산하세요.`;
+    if (threshKRW > 0) extras += `\n- ${threshKRW.toLocaleString()}원 이상 거래를 summary.high_value에 {date,description,amount} 배열로 넣으세요.`;
+
+    const prompt = `당신은 개인회생 전문 법무법인의 AI 분석 시스템입니다.
+첨부된 거래내역 PDF/이미지를 분석하여 개인회생 법원 제출용으로 분류해 주세요.
+의뢰인: ${clientName}
+
+카테고리: 생활비 / 사치성 지출 / 채무 변제 / 급여·수입 / 저축·이체 / 기타${state.opts.person ? ' / 특정인 이체' : ''}${state.opts.sec ? ' / 증권·코인' : ''}
+${extras}
+
+반드시 JSON만 출력 (백틱·설명 없이):
+{
+  "transactions": [
+    { "date":"날짜", "description":"내용", "amount":숫자(출금음수입금양수), "balance":잔액또는null, "category":"카테고리", "note":"분류근거한줄" }
+  ],
+  "summary": {
+    "생활비":0, "사치성 지출":0, "채무 변제":0, "급여/수입":0, "저축/이체":0, "기타":0,
+    "총지출":0, "총수입":0, "총거래건수":0,
+    "high_value": [], "loan_usage": [], "sec_coin": 0
+  },
+  "opinion": "법무법인 제이엘피 담당 변호사 검토 의견 3~5줄",
+  "caution": "주의사항 (없으면 빈문자열)",
+  "period": "분석 기간 예: 2023.01 ~ 2024.12"
+}`;
+
+    contentParts.push({ type: 'text', text: prompt });
+
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 4000,
+        messages: [{ role: 'user', content: contentParts }],
+      }),
+    });
+
+    const data = await res.json();
+    const text = (data.content || []).map(b => b.text || '').join('');
+    const clean = text.replace(/```json|```/g, '').trim();
+    state.result = JSON.parse(clean);
+    renderResults(clientName, threshKRW);
+  } catch (e) {
+    errBox.textContent = '⚠️ 분석 중 오류가 발생했습니다. PDF/이미지 파일인지 확인하거나 잠시 후 다시 시도해 주세요.\n' + e.message;
+    errBox.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '▷ 분석 시작';
+  }
+}
+
+// ════════ Render Results ════════
+function fmtKRW(n) {
+  if (!n && n !== 0) return '-';
+  return Math.abs(n).toLocaleString('ko-KR') + '원';
+}
+
+function catClass(cat) {
+  if (!cat) return 'cat-기타';
+  if (cat.includes('생활')) return 'cat-생활비';
+  if (cat.includes('사치')) return 'cat-사치성';
+  if (cat.includes('채무') || cat.includes('변제')) return 'cat-채무';
+  if (cat.includes('급여') || cat.includes('수입')) return 'cat-급여';
+  if (cat.includes('저축') || cat.includes('이체')) return 'cat-저축';
+  if (cat.includes('증권') || cat.includes('코인')) return 'cat-증권';
+  if (cat.includes('특정')) return 'cat-특정인';
+  return 'cat-기타';
+}
+
+function renderResults(clientName, threshKRW) {
+  const r = state.result;
+  const s = r.summary || {};
+
+  document.getElementById('result-period').textContent = r.period || '';
+
+  // Summary cards
+  const cards = [
+    ['생활비', s['생활비'], '#2E7D32'],
+    ['사치성 지출', s['사치성 지출'], '#C62828'],
+    ['채무 변제', s['채무 변제'], '#1565C0'],
+    ['급여/수입', s['급여/수입'], '#6A1B9A'],
+    ['총 지출', s['총지출'], '#1A2B4A'],
+    ['총 수입', s['총수입'], '#00796B'],
+  ];
+  document.getElementById('summary-grid').innerHTML = cards.map(([label, val, color]) => `
+    <div class="summary-card" style="border-left-color:${color}">
+      <div class="summary-label">${label}</div>
+      <div class="summary-val" style="color:${color}">${fmtKRW(val)}</div>
+    </div>
+  `).join('');
+
+  // High value
+  const hv = s.high_value || [];
+  document.getElementById('highval-section').innerHTML = hv.length ? `
+    <div class="highval-box">
+      <div class="highval-title">💰 기준금액(${fmtKRW(threshKRW)}) 이상 거래</div>
+      ${hv.map(h => `<div class="highval-row"><span style="color:#888;min-width:80px">${h.date}</span><span style="flex:1">${h.description}</span><span style="font-weight:600;color:#E65100">${fmtKRW(h.amount)}</span></div>`).join('')}
+    </div>
+  ` : '';
+
+  // Loan usage
+  const lu = s.loan_usage || [];
+  document.getElementById('loan-section').innerHTML = lu.length ? `
+    <div class="highval-box" style="background:#E8EAF6;border-color:#9FA8DA">
+      <div class="highval-title" style="color:#283593">🏦 대출금 사용처 소명표</div>
+      <table style="width:100%;font-size:13px;border-collapse:collapse">
+        <tr>${['날짜','금액','사용처'].map(h=>`<th style="text-align:left;padding:6px 8px;color:#555;border-bottom:1px solid #9FA8DA">${h}</th>`).join('')}</tr>
+        ${lu.map(l=>`<tr><td style="padding:6px 8px;color:#888">${l.date}</td><td style="padding:6px 8px;font-weight:600">${fmtKRW(l.amount)}</td><td style="padding:6px 8px">${l.usage}</td></tr>`).join('')}
+      </table>
+    </div>
+  ` : '';
+
+  // Opinion
+  if (r.opinion) {
+    document.getElementById('opinion-text').textContent = r.opinion;
+    const caut = document.getElementById('caution-text');
+    if (r.caution) { caut.textContent = '⚠️ ' + r.caution; caut.style.display = 'block'; }
+    document.getElementById('opinion-box').style.display = 'block';
+  }
+
+  // Table
+  const txs = r.transactions || [];
+  document.getElementById('tx-count').textContent = `(${txs.length}건)`;
+  document.getElementById('tx-tbody').innerHTML = txs.map(t => `
+    <tr>
+      <td style="color:#888;white-space:nowrap">${t.date || '-'}</td>
+      <td style="max-width:200px">${t.description || '-'}</td>
+      <td class="${t.amount > 0 ? 'amount-in' : 'amount-out'}">${t.amount > 0 ? '+' : ''}${(t.amount || 0).toLocaleString()}원</td>
+      <td style="color:#888;white-space:nowrap">${t.balance != null ? t.balance.toLocaleString() + '원' : '-'}</td>
+      <td><span class="cat ${catClass(t.category)}">${t.category || '기타'}</span></td>
+      <td style="color:#888;font-size:12px;max-width:180px">${t.note || ''}</td>
+    </tr>
+  `).join('');
+
+  document.getElementById('results').style.display = 'block';
+  document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ════════ Download Report ════════
+document.getElementById('btn-download').addEventListener('click', () => {
+  if (!state.result) return;
+  const r = state.result;
+  const s = r.summary || {};
+  const clientName = document.getElementById('client-name').value || '의뢰인';
+  const lines = [
+    '══════════════════════════════════════════',
+    '   법무법인 제이엘피  개인회생 거래내역 분석보고서',
+    '══════════════════════════════════════════',
+    `의뢰인: ${clientName}`,
+    `분석기간: ${r.period || '-'}`,
+    `작성일: ${new Date().toLocaleDateString('ko-KR')}`,
+    `담당: 법무법인 제이엘피 회생파산팀`,
+    '',
+    '【지출 항목별 요약】',
+    `  생활비:        ${fmtKRW(s['생활비'])}`,
+    `  사치성 지출:   ${fmtKRW(s['사치성 지출'])}`,
+    `  채무 변제:     ${fmtKRW(s['채무 변제'])}`,
+    `  급여/수입:     ${fmtKRW(s['급여/수입'])}`,
+    `  저축/이체:     ${fmtKRW(s['저축/이체'])}`,
+    `  기타:          ${fmtKRW(s['기타'])}`,
+    '',
+    `  총 지출:       ${fmtKRW(s['총지출'])}`,
+    `  총 수입:       ${fmtKRW(s['총수입'])}`,
+    `  총 거래 건수:  ${s['총거래건수'] || 0}건`,
+    '',
+    '【담당자 검토 의견】',
+    r.opinion || '',
+    '',
+    ...(r.caution ? ['【주의사항】', r.caution, ''] : []),
+    '【거래내역 상세】',
+    '날짜\t\t내용\t\t금액\t\t분류',
+    '─────────────────────────────────────────',
+    ...(r.transactions || []).map(t => `${t.date}\t${t.description}\t${t.amount > 0 ? '+' : ''}${(t.amount||0).toLocaleString()}원\t${t.category}`),
+    '',
+    '══════════════════════════════════════════',
+    '법무법인 제이엘피 | 서울 서초구 | 1670-7309',
+    '본 보고서는 AI 분석 초안이며, 법원 제출 전 담당 변호사 검토가 필요합니다.',
+  ];
+  const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
+  const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: `JLP_거래내역분석_${clientName}.txt` });
+  a.click();
+});
+</script>
+</body>
+</html>
